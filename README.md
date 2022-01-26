@@ -1,1 +1,1 @@
-# eeg_pitch_tracking
+eeg pitch tracking
