@@ -1,35 +1,43 @@
+from psychopy import prefs
+prefs.hardware['audioLib'] = ['ptb']
 from psychopy.sound.backend_ptb import SoundPTB as Sound
 from psychtoolbox import GetSecs, WaitSecs
-#from RTBox import RTBox
+from events import EventMarker
 import numpy as np
 
-trials = 10
+TEST_MODE = True
+
+trials = 1000
 min_freq = 40
 max_freq = 250
 
 # init device to send TTL triggers
-#box = RTBox()
+marker = EventMarker()
 
 # set the seed to the subject number so trial order can be recreated
-np.random.seed(0)
+sub_num = input("Input subject number: ")
+sub_num = int(sub_num)
+np.random.seed(sub_num)
 
 # start the experiment
 WaitSecs(5.)
 
 for i in range(trials):
-    freq = np.random.randint(40, 250)
+
+    if TEST_MODE:
+        freq = 100
+    else:
+        freq = np.random.randint(50, 125)
     snd = Sound(freq, secs = 0.1)
 
     # schedule sound
     now = GetSecs()
     snd.play(when = now + 0.1)
-
-    # try to send TTL trigger at same time as sound
-    WaitSecs(0.099)
-    #box.TTL(trigger)
+    WaitSecs(0.1)
+    marker.send(freq)
 
     # add jitter between trials
     WaitSecs(0.1+np.random.uniform(0, 0.1))
 
-#box.close()
+marker.close()
 print("Done.")
