@@ -6,15 +6,11 @@ from psychtoolbox import GetSecs, WaitSecs
 import numpy as np
 import os.path
 import csv
-import time
-
-start_time = time.time()
 
 TEST_MODE = False
-
-trials = 2000
-min_freq = 40
-max_freq = 254
+TRIALS = 2000
+MIN_FREQ = 40
+MAX_FREQ = 254
 
 # init device to send TTL triggers
 #marker = EventMarker()
@@ -23,28 +19,29 @@ max_freq = 254
 sub_num = input("Input subject number: ")
 block_num = input("Input block number: ")
 
+# set subject number and block as seed
+seed = int(sub_num + "0" + block_num)
+print("Current seed: " + str(seed))
+np.random.seed(seed)
+
 # count trial progress in log file
-log = "subj_" + sub_num + "_block_" + block_num + ".log"
+log = "logs/subj_" + sub_num + "_block_" + block_num + ".log"
 if not os.path.isfile(log): # create log file if it doesn't exist
     with open(log, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['trial', 'freq', 'marker'])
 trial_count = sum(1 for line in open(log))
-
-# set subject number and block as seed
-seed = int(sub_num + "0" + block_num)
-print("Seed: " + str(seed))
-np.random.seed(seed)
+print("Current trial number: " + trial_count)
 
 # start the experiment
 WaitSecs(5.)
 
-for i in range(trial_count, trials + 1):
+for i in range(trial_count, TRIALS + 1):
 
     if TEST_MODE:
         freq = 100
     else:
-        freq = np.random.randint(min_freq, max_freq)
+        freq = np.random.randint(MIN_FREQ, MAX_FREQ)
         freq = freq - (freq%2) # get only even numbered freqs for tags
     snd = Sound(freq, secs = 0.2)
 
@@ -60,9 +57,8 @@ for i in range(trial_count, trials + 1):
         writer = csv.writer(f)
         writer.writerow([i, freq, marker])
 
-    # add jitter between trials
+    # add jitter between TRIALS
     WaitSecs(0.2+np.random.uniform(0, 0.1))
 
 #marker.close()
 print("Done.")
-print("--- %s seconds ---" % (time.time() - start_time))
