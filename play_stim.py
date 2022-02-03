@@ -36,25 +36,25 @@ print("Current trial number: " + str(trial_count))
 WaitSecs(5.)
 
 for i in range(trial_count, TRIALS + 1):
+    print(i)
 
     if TEST_MODE:
         freq = 100
     else:
-        marker = np.random.randint(0, len(FREQS))
-        print(marker)
-        freq = FREQS[marker]
+        mark = np.random.randint(0, len(FREQS))
+        freq = FREQS[mark]
     snd = Sound(freq, secs = 0.2)
 
     # schedule sound
     now = GetSecs()
     snd.play(when = now + 0.1)
     WaitSecs(0.1)
-    marker.send(marker)
+    marker.send(mark)
 
     # log trial info
     with open(log, 'a') as f:
         writer = csv.writer(f)
-        writer.writerow([i, freq, marker])
+        writer.writerow([i, freq, mark])
 
     # add jitter between TRIALS
     WaitSecs(0.2+np.random.uniform(0, 0.1))
