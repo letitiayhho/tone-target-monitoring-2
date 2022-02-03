@@ -8,7 +8,7 @@ import os.path
 import csv
 
 TEST_MODE = False
-TRIALS = 1500
+TRIALS = 2000
 FREQS = [40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260]
 
 # init device to send TTL triggers
