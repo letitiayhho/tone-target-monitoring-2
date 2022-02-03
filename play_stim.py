@@ -2,7 +2,7 @@ from psychopy import prefs
 prefs.hardware['audioLib'] = ['ptb']
 from psychopy.sound.backend_ptb import SoundPTB as Sound
 from psychtoolbox import GetSecs, WaitSecs
-#from events import EventMarker
+from events import EventMarker
 import numpy as np
 import os.path
 import csv
@@ -12,7 +12,7 @@ TRIALS = 1500
 FREQS = [40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260]
 
 # init device to send TTL triggers
-#marker = EventMarker()
+marker = EventMarker()
 
 # ask for subject and block number
 sub_num = input("Input subject number: ")
@@ -49,7 +49,7 @@ for i in range(trial_count, TRIALS + 1):
     now = GetSecs()
     snd.play(when = now + 0.1)
     WaitSecs(0.1)
-    #marker.send(marker)
+    marker.send(marker)
 
     # log trial info
     with open(log, 'a') as f:
@@ -59,5 +59,5 @@ for i in range(trial_count, TRIALS + 1):
     # add jitter between TRIALS
     WaitSecs(0.2+np.random.uniform(0, 0.1))
 
-#marker.close()
+marker.close()
 print("Done.")
