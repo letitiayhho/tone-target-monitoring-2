@@ -8,9 +8,8 @@ import os.path
 import csv
 
 TEST_MODE = False
-TRIALS = 2000
-MIN_FREQ = 40
-MAX_FREQ = 254
+TRIALS = 1500
+FREQS = [40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260]
 
 # init device to send TTL triggers
 #marker = EventMarker()
@@ -31,7 +30,7 @@ if not os.path.isfile(log): # create log file if it doesn't exist
         writer = csv.writer(f)
         writer.writerow(['trial', 'freq', 'marker'])
 trial_count = sum(1 for line in open(log))
-print("Current trial number: " + trial_count)
+print("Current trial number: " + str(trial_count))
 
 # start the experiment
 WaitSecs(5.)
@@ -41,15 +40,15 @@ for i in range(trial_count, TRIALS + 1):
     if TEST_MODE:
         freq = 100
     else:
-        freq = np.random.randint(MIN_FREQ, MAX_FREQ)
-        freq = freq - (freq%2) # get only even numbered freqs for tags
+        marker = np.random.randint(0, len(FREQS))
+        print(marker)
+        freq = FREQS[marker]
     snd = Sound(freq, secs = 0.2)
 
     # schedule sound
     now = GetSecs()
     snd.play(when = now + 0.1)
     WaitSecs(0.1)
-    marker = int(freq/2)
     #marker.send(marker)
 
     # log trial info
