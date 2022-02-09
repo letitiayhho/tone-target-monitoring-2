@@ -1,0 +1,39 @@
+if you try to downsample without having filtered to 1/2 of what you're going to downsampled to, its going to try to downsample to prevent aliasing
+filter before you split to epochs, then downsample
+low-pass filter at half the sample rate, or less, before you epoch
+low-pass filter at 300 hz before epoching (1)
+notch filter everything up to 300 hz (2)
+
+epoch (3)
+
+down-sample to 1200 hz (4)
+
+50, 100, 150, 200, 250
+filter line noise, regressing out a sine wave, does that instead of using a 2hz window
+
+then split the data up (5)
+one version high-pass filtered at 1 hz
+one version high-pass filtered from 30 to 270
+
+ICA with version of data high-pass filtered at 1 hz (6)
+
+apply ICA epoch rejection to version of data high-pass filtered from 30 to 270 (7)
+
+
+
+
+add reference back in?
+
+
+I'd love for you to come ice skating, I think it'll be tons of fun
+I wasn't sure if I'm making things weird
+
+it's been great to hang out overall
+I actually just not sure if I'm 
+
+
+Same here
+
+same! and don't get me wrong, you should totally come if you want
+I think it will be fun 🙂
+I was probably coming on a bit strong, I was excited to get to know you, but I don't want to make things weird
