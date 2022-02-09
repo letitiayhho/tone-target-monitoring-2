@@ -8,8 +8,9 @@ import os.path
 import csv
 
 TEST_MODE = False
-TRIALS = 1500
-FREQS = [40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260]
+TRIALS = 1000 # blocks should take ~7 minutes? time it
+#FREQS = [40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260]
+FREQS = [50, 100, 150, 200, 250]
 
 # init device to send TTL triggers
 marker = EventMarker()
