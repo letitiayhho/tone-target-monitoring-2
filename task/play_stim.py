@@ -25,7 +25,7 @@ print("Current seed: " + str(seed))
 np.random.seed(seed)
 
 # count trial progress in log file
-log = "logs/subj_" + sub_num + "_block_" + block_num + ".log"
+log = "data/logs/subj_" + sub_num + "_block_" + block_num + ".log"
 if not os.path.isfile(log): # create log file if it doesn't exist
     with open(log, 'w', newline='') as f:
         writer = csv.writer(f)
