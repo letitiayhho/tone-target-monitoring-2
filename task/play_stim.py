@@ -8,8 +8,7 @@ import os.path
 import csv
 
 TEST_MODE = False
-TRIALS = 1000 # blocks should take ~7 minutes? time it
-#FREQS = [40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260]
+TRIALS = 1200 # takes about 6:40 per block
 FREQS = [50, 100, 150, 200, 250]
 
 # init device to send TTL triggers
@@ -42,8 +41,9 @@ for i in range(trial_count, TRIALS + 1):
     if TEST_MODE:
         freq = 100
     else:
-        mark = np.random.randint(0, len(FREQS))
-        freq = FREQS[mark]
+        index = np.random.randint(0, len(FREQS))
+        freq = FREQS[index]
+        mark = index + 1
     snd = Sound(freq, secs = 0.2)
 
     # schedule sound
