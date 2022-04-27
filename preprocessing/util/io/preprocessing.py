@@ -15,12 +15,6 @@ from mne_bids import BIDSPath, read_raw_bids
 from util.io.bids import DataSink
 from bids import BIDSLayout
 
-# Constants
-BIDS_ROOT = '../data/bids'
-DERIV_ROOT = '../data/bids/derivatives'
-LOWPASS = 300
-FS = 2000
-
 # Create Iterator object to loop over all files
 KeyType = Tuple[str, str, str]
 
