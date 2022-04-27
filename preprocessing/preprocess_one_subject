@@ -12,8 +12,8 @@ set -exuo pipefail
 module load python
 module load parallel
 
-if [[ $# -ne 1 ]]; then
-  echo "usage: $0 <bids filename>"
+if [[ $# -ne 3 ]]; then
+  echo "usage: $0 <sub> <task> <runs>"
   exit 1
 fi
 
@@ -23,9 +23,11 @@ cd "$GIT_HOME" || exit
 job_id="$SLURM_JOB_ID"
 log_file="preprocessing/logs/$job_id.log"
 
-bids_filename="$1"
+sub="$1"
+task="$2"
+runs="$3"
 
-python preprocessing/preprocess.py "$bids_filename" 2>&1 \
+python preprocessing/preprocess.py "$sub" "$task" "$runs" 2>&1 \
   | tee -a "$log_file"
 
 printf "\n\n Preprocessing complete \n\n"
