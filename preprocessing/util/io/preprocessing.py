@@ -15,6 +15,12 @@ from mne_bids import BIDSPath, read_raw_bids
 from util.io.bids import DataSink
 from bids import BIDSLayout
 
+# Constants
+BIDS_ROOT = '../data/bids'
+DERIV_ROOT = '../data/bids/derivatives'
+LOWPASS = 300
+FS = 2000
+
 # Create Iterator object to loop over all files
 KeyType = Tuple[str, str, str]
 
@@ -50,6 +56,7 @@ def create_eogs(raw):
     raw = raw.drop_channels(['reog', 'leog'])
     raw = raw.set_channel_types({'eog1': 'eog', 'eog2': 'eog'})
     return raw
+
 
 def resample(raw, fs, events): # Resample to a more manageable speed
     raw, events = raw.resample(fs, events = events)
@@ -124,12 +131,12 @@ def get_save_path(deriv_root, sub, task, run):
                     suffix = 'epo', # this suffix is following MNE, not BIDS, naming conventions
                     extension = 'fif.gz',
                     )
-    return fpath
+    return fpath, sink
 
 def save_preprocessed_data(fpath, epochs):
     epochs.save(fpath, overwrite = True)
 
-def generate_report(fpath, epochs, ica, bads, thres):
+def generate_report(fpath, sink, epochs, ica, bads, thres):
     report = mne.Report(verbose = True)
     report.parse_folder(op.dirname(fpath), pattern = '*epo.fif.gz', render_bem = False)
 
