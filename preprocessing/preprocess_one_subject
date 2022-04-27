@@ -1,0 +1,31 @@
+#!/bin/bash
+#SBATCH --time=1:30:00
+#SBATCH --partition=broadwl
+#SBATCH --ntasks=1
+#SBATCH --mem-per-cpu=4gb
+#SBATCH --mail-type=all
+#SBATCH --mail-user=letitiayhho@uchicago.edu
+#SBATCH --output=%j.log
+
+set -exuo pipefail
+
+module load python
+module load parallel
+
+if [[ $# -ne 1 ]]; then
+  echo "usage: $0 <bids filename>"
+  exit 1
+fi
+
+GIT_HOME="$(git rev-parse --show-toplevel)"
+cd "$GIT_HOME" || exit
+
+job_id="$SLURM_JOB_ID"
+log_file="preprocessing/logs/$job_id.log"
+
+bids_filename="$1"
+
+python preprocessing/preprocess.py "$bids_filename" 2>&1 \
+  | tee -a "$log_file"
+
+printf "\n\n Preprocessing complete \n\n"
