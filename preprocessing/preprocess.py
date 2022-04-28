@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
+import sys
 import numpy as np
 import os.path as op
 from pprint import pformat
 from typing import Tuple, Iterator
-import time
 
 # EEG utilities
 import mne
@@ -30,7 +30,7 @@ def main(sub, task, runs) -> None:
     bids_path = get_bids_path(BIDS_ROOT, sub, task, run)
     print(bids_path)
     if not bids_path.fpath.is_file(): # skip if file doesn't exist
-        continue
+        return None
     raw = import_bids_data(bids_path)
     events, event_ids = read_events(raw)
 
