@@ -18,7 +18,7 @@ from util.io.bids import DataSink
 from bids import BIDSLayout
 from util.io.preprocessing import *
 
-def main(sub, task, runs) -> None:
+def main(sub, task, run) -> None:
     # Constants
     BIDS_ROOT = '../data/bids'
     DERIV_ROOT = '../data/bids/derivatives'
@@ -74,5 +74,5 @@ if __name__ == "__main__":
         sys.exit(1)
     sub = sys.argv[1]
     task = sys.argv[2]
-    runs = sys.argv[3]
-    main(sub, task, runs)
+    run = sys.argv[3]
+    main(sub, task, run)
