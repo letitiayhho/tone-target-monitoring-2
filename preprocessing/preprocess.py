@@ -16,7 +16,7 @@ from autoreject import get_rejection_threshold, validation_curve
 from mne_bids import BIDSPath, read_raw_bids
 from util.io.bids import DataSink
 from bids import BIDSLayout
-import util.io.preprocessing
+from util.io.preprocessing import *
 
 def main(sub, task, runs) -> None:
     # Constants
