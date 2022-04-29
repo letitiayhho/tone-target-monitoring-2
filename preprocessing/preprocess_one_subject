@@ -24,6 +24,8 @@ sub="$1"
 task="$2"
 run="$3"
 
+module load python
+
 python preprocessing/preprocess.py "$sub" "$task" "$run"
 
 printf "\n\n Preprocessing complete \n\n"
