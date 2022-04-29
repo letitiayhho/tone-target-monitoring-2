@@ -5,7 +5,7 @@
 #SBATCH --mem-per-cpu=12gb
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
-#SBATCH --output=%j.log
+#SBATCH --output=logs/%j.log
 
 set -exuo pipefail
 
@@ -20,14 +20,10 @@ fi
 GIT_HOME="$(git rev-parse --show-toplevel)"
 cd "$GIT_HOME" || exit
 
-job_id="$SLURM_JOB_ID"
-log_file="preprocessing/logs/$job_id.log"
-
 sub="$1"
 task="$2"
 run="$3"
 
-python preprocessing/preprocess.py "$sub" "$task" "$run" 2>&1 \
-  | tee -a "$log_file"
+python preprocessing/preprocess.py "$sub" "$task" "$run"
 
 printf "\n\n Preprocessing complete \n\n"
