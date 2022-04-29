@@ -6,7 +6,7 @@ from typing import Tuple, Iterator
 
 def main() -> None:
     # CONSTANTS
-        BIDS_ROOT = '../data/bids'
+    BIDS_ROOT = '../data/bids'
 
     # Parse BIDS directory
     layout = BIDSLayout(BIDS_ROOT)
