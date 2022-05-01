@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import subprocess
+import sys
 from bids import BIDSLayout
 from typing import Tuple, Iterator
 
@@ -26,7 +27,7 @@ def main() -> None:
                     yield key
 
     for (sub, task, run) in fpaths():
-        subprocess.check_call("./preprocess_one_subject %s %s %s" % (sub, task, run), shell=True)
+        subprocess.check_call("sbatch ./preprocess.py %s %s %s" % (sub, task, run), shell=True)
 
 if __name__ == "__main__":
     if len(sys.argv) != 1:
