@@ -76,7 +76,4 @@ if __name__ == "__main__":
     sub = sys.argv[1]
     task = sys.argv[2]
     run = sys.argv[3]
-    print("Type of sub: " + str(type(sub)) + ", sub value: " + sub)
-    print("Type of task: " + str(type(task)) + ", task value: " + task)
-    print("Type of run: " + str(type(run)) + ", run value: " + run)
     main(sub, task, run)
