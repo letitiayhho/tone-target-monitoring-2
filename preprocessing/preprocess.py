@@ -1,21 +1,29 @@
 #!/usr/bin/env python3
 
+#SBATCH --time=1:30:00
+#SBATCH --partition=broadwl
+#SBATCH --ntasks=1
+#SBATCH --mem-per-cpu=24gb
+#SBATCH --mail-type=all
+#SBATCH --mail-user=letitiayhho@uchicago.edu
+#SBATCH --output=logs/%j.log
+
 import sys
-import numpy as np
-import os.path as op
-from pprint import pformat
-from typing import Tuple, Iterator
+#import numpy as np
+#import os.path as op
+#from pprint import pformat
+#from typing import Tuple, Iterator
 
 # EEG utilities
-import mne
-from mne.preprocessing import ICA, create_eog_epochs
-from pyprep.prep_pipeline import PrepPipeline
-from autoreject import get_rejection_threshold, validation_curve
+#import mne
+#from mne.preprocessing import ICA, create_eog_epochs
+#from pyprep.prep_pipeline import PrepPipeline
+#from autoreject import get_rejection_threshold, validation_curve
 
 # BIDS utilities
-from mne_bids import BIDSPath, read_raw_bids
-from util.io.bids import DataSink
-from bids import BIDSLayout
+#from mne_bids import BIDSPath, read_raw_bids
+#from util.io.bids import DataSink
+#from bids import BIDSLayout
 from util.io.preprocessing import *
 
 def main(sub, task, run) -> None:
@@ -68,6 +76,7 @@ def main(sub, task, run) -> None:
     fpath, sink = get_save_path(DERIV_ROOT, sub, task, run)
     save_preprocessed_data(fpath, epochs)
     generate_report(fpath, sink, epochs, ica, bads, thres)
+    print("Saving results and report to: " + str(fpath))
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
