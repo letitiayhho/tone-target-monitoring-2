@@ -1,5 +1,6 @@
 import numpy as np
 import os.path as op
+import os
 from pprint import pformat
 from typing import Tuple, Iterator
 import time
@@ -27,12 +28,18 @@ def fpaths() -> Iterator[KeyType]:
                 yield key
 
 def get_bids_path(bids_root, sub, task, run):
+    print(os.getcwd())
+    print("bids_root: " + bids_root)
+    print("sub: " + sub)
+    print("task: " + task)
+    print("run: " + run)
     bids_path = BIDSPath(root = bids_root,
                         subject = sub,
                         task = task,
                         run = run,
                         datatype = 'eeg',
                         )
+    print("bids_path: " + str(bids_path))
     return bids_path
 
 def import_bids_data(bids_path):

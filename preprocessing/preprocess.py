@@ -30,6 +30,7 @@ def main(sub, task, run) -> None:
     bids_path = get_bids_path(BIDS_ROOT, sub, task, run)
     print(bids_path)
     if not bids_path.fpath.is_file(): # skip if file doesn't exist
+        print("Skipping file")
         return None
     raw = import_bids_data(bids_path)
     events, event_ids = read_events(raw)
@@ -75,4 +76,7 @@ if __name__ == "__main__":
     sub = sys.argv[1]
     task = sys.argv[2]
     run = sys.argv[3]
+    print("Type of sub: " + str(type(sub)) + ", sub value: " + sub)
+    print("Type of task: " + str(type(task)) + ", task value: " + task)
+    print("Type of run: " + str(type(run)) + ", run value: " + run)
     main(sub, task, run)
