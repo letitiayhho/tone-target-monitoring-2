@@ -9,21 +9,6 @@
 #SBATCH --output=logs/%j.log
 
 import sys
-#import numpy as np
-#import os.path as op
-#from pprint import pformat
-#from typing import Tuple, Iterator
-
-# EEG utilities
-#import mne
-#from mne.preprocessing import ICA, create_eog_epochs
-#from pyprep.prep_pipeline import PrepPipeline
-#from autoreject import get_rejection_threshold, validation_curve
-
-# BIDS utilities
-#from mne_bids import BIDSPath, read_raw_bids
-#from util.io.bids import DataSink
-#from bids import BIDSLayout
 from util.io.preprocessing import *
 
 def main(sub, task, run) -> None:
