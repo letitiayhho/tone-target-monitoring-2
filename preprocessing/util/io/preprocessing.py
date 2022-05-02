@@ -81,7 +81,7 @@ def bandpass(raw, h_freq, l_freq):
     raw = raw.filter(l_freq = l_freq, h_freq = h_freq)
     return raw
 
-def epoch(raw):
+def epoch(raw, events, event_ids):
     epochs = mne.Epochs(
         raw,
         events,
@@ -98,7 +98,7 @@ def compute_ICA(epochs):
     ica = ica.fit(epochs, picks = ['eeg', 'eog'])
     return ica
 
-def apply_ICA(epochs_for_ica, epochs):
+def apply_ICA(epochs_for_ica, epochs, ica):
     eog_indices, eog_scores = ica.find_bads_eog(epochs_for_ica, threshold = 1.96)
     ica.exclude = eog_indices
     epochs = ica.apply(epochs) # apply to aggressively filtered version of data

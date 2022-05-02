@@ -45,11 +45,11 @@ def main(sub, task, run) -> None:
     raw_for_ica = bandpass(raw, None, 1)
     raw = bandpass(raw, 270, 30)
 
-    epochs_for_ica = epoch(raw_for_ica)
-    epochs = epoch(raw)
+    epochs_for_ica = epoch(raw_for_ica, events, event_ids)
+    epochs = epoch(raw, events, event_ids)
 
     ica = compute_ICA(epochs_for_ica) # run ICA on less aggressively filtered data
-    epochs, ica = apply_ICA(epochs_for_ica, epochs) # apply ICA on more aggressively filtered data
+    epochs, ica = apply_ICA(epochs_for_ica, epochs, ica) # apply ICA on more aggressively filtered data
 
     # Baseline correct and reject trials
     print("---------- Baseline correct and reject trials ----------")
