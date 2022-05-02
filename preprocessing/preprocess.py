@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=00:30:00
+#SBATCH --time=01:00:00
 #SBATCH --partition=broadwl
 #SBATCH --ntasks=1
 #SBATCH --mem-per-cpu=48gb
@@ -60,7 +60,7 @@ def main(sub, task, run) -> None:
     print("---------- Save results and generate report ----------")
     fpath, sink = get_save_path(DERIV_ROOT, sub, task, run)
     save_preprocessed_data(fpath, epochs)
-    generate_report(fpath, sink, epochs, ica, bads, thres)
+    generate_report(fpath, sink, sub, task, run, epochs, ica, bads, thres)
     print("Saving results and report to: " + str(fpath))
 
 if __name__ == "__main__":

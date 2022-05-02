@@ -131,7 +131,7 @@ def get_save_path(deriv_root, sub, task, run):
 def save_preprocessed_data(fpath, epochs):
     epochs.save(fpath, overwrite = True)
 
-def generate_report(fpath, sink, epochs, ica, bads, thres):
+def generate_report(fpath, sink, sub, task, run, epochs, ica, bads, thres):
     report = mne.Report(verbose = True)
     report.parse_folder(op.dirname(fpath), pattern = '*epo.fif.gz', render_bem = False)
 
@@ -161,4 +161,4 @@ def generate_report(fpath, sink, epochs, ica, bads, thres):
     report.add_html('<br/>threshold: {:0.2f} microvolts</br>'.format(thres['eeg'] * 1e6),
                                 title = 'Trial Rejection Criteria')
     report.add_html(epochs.info._repr_html_(), title = 'Info')
-    report.save(op.join(sink.deriv_root, 'sub-%s.html'%sub), open_browser = False, overwrite = True)
+    report.save(op.join(sink.deriv_root, 'sub-%s_task-%s_run-%s.html'%(sub, task, run)), open_browser = False, overwrite = True)
