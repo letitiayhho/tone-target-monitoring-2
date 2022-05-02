@@ -139,8 +139,8 @@ def generate_report(fpath, sink, epochs, ica, bads, thres):
     fig_erp = epochs['50'].average().plot(spatial_colors = True)
     report.add_figure(
         fig_erp,
-        captions = 'Average Evoked Response',
-        section = 'evoked'
+        caption = 'Average Evoked Response',
+        title = 'evoked'
     )
 
     # Plot the excluded ICAs
@@ -148,8 +148,8 @@ def generate_report(fpath, sink, epochs, ica, bads, thres):
         fig_ica_removed = ica.plot_components(ica.exclude)
         report.add_figure(
             fig_ica_removed,
-            captions = 'Removed ICA Components',
-            section = 'ICA'
+            caption = 'Removed ICA Components',
+            title = 'ICA'
         )
 
     # Format output
@@ -157,8 +157,8 @@ def generate_report(fpath, sink, epochs, ica, bads, thres):
     for line in pformat(bads).splitlines():
         html_lines.append('<br/>%s' % line)
     html = '\n'.join(html_lines)
-    report.add_html(html, captions = 'Interpolated Channels', section = 'channels')
+    report.add_html(html, title = 'Interpolated Channels')
     report.add_html('<br/>threshold: {:0.2f} microvolts</br>'.format(thres['eeg'] * 1e6),
-                                captions = 'Trial Rejection Criteria', section = 'rejection')
-    report.add_html(epochs.info._repr_html_(), captions = 'Info', section = 'info')
+                                title = 'Trial Rejection Criteria')
+    report.add_html(epochs.info._repr_html_(), title = 'Info')
     report.save(op.join(sink.deriv_root, 'sub-%s.html'%sub), open_browser = False, overwrite = True)
