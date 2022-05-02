@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=00:40:00
+#SBATCH --time=00:30:00
 #SBATCH --partition=broadwl
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=24gb
+#SBATCH --mem-per-cpu=48gb
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
 #SBATCH --output=logs/%j.log
