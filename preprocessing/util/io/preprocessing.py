@@ -133,7 +133,7 @@ def save_preprocessed_data(fpath, epochs):
 
 def generate_report(fpath, sink, sub, task, run, epochs, ica, bads, thres):
     report = mne.Report(title = 'MNE Report for sub-%s run-%s'%(sub, run), verbose = True)
-    report.parse_folder(op.dirname(fpath), pattern = '*/*run-%s*epo.fif.gz'%run, render_bem = False)
+    report.parse_folder(op.dirname(fpath), pattern = '*run-%s*epo.fif.gz'%run, render_bem = False)
 
     # Plot the ERP
     fig_erp = epochs['50'].average().plot(spatial_colors = True)

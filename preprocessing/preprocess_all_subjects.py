@@ -4,6 +4,7 @@ import subprocess
 import sys
 from bids import BIDSLayout
 from typing import Tuple, Iterator
+from util.io.preprocessing import *
 
 def main() -> None:
     # CONSTANTS
@@ -27,7 +28,9 @@ def main() -> None:
                     yield key
 
     for (sub, task, run) in fpaths():
-        subprocess.check_call("sbatch ./preprocess.py %s %s %s" % (sub, task, run), shell=True)
+	bids_path = get_bids_path(BIDS_ROOT, sub, task, run)
+	if bids_path.fpath.is_file():
+		subprocess.check_call("sbatch ./preprocess.py %s %s %s" % (sub, task, run), shell=True)
 
 if __name__ == "__main__":
     if len(sys.argv) != 1:

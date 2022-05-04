@@ -22,9 +22,6 @@ def main(sub, task, run) -> None:
     print("---------- Import data ----------")
     bids_path = get_bids_path(BIDS_ROOT, sub, task, run)
     print(bids_path)
-    if not bids_path.fpath.is_file(): # skip if file doesn't exist
-        print("Skipping file")
-        return None
     raw = import_bids_data(bids_path)
     events, event_ids = read_events(raw)
 
