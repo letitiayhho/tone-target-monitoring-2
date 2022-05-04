@@ -132,7 +132,7 @@ def save_preprocessed_data(fpath, epochs):
     epochs.save(fpath, overwrite = True)
 
 def generate_report(fpath, sink, sub, task, run, epochs, ica, bads, thres):
-    report = mne.Report(title = 'MNE Report for sub-%s run-%'%(sub, run), verbose = True)
+    report = mne.Report(title = 'MNE Report for sub-%s run-%s'%(sub, run), verbose = True)
     report.parse_folder(op.dirname(fpath), pattern = '*/*run-%s*epo.fif.gz'%run, render_bem = False)
 
     # Plot the ERP
