@@ -28,9 +28,9 @@ def main() -> None:
                     yield key
 
     for (sub, task, run) in fpaths():
-	bids_path = get_bids_path(BIDS_ROOT, sub, task, run)
-	if bids_path.fpath.is_file():
-		subprocess.check_call("sbatch ./preprocess.py %s %s %s" % (sub, task, run), shell=True)
+        bids_path = get_bids_path(BIDS_ROOT, sub, task, run)
+        if bids_path.fpath.is_file():
+            	subprocess.check_call("sbatch ./preprocess.py %s %s %s" % (sub, task, run), shell=True)
 
 if __name__ == "__main__":
     if len(sys.argv) != 1:
