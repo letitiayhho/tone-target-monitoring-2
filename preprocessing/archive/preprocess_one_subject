@@ -2,32 +2,27 @@
 #SBATCH --time=1:30:00
 #SBATCH --partition=broadwl
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=4gb
+#SBATCH --mem-per-cpu=24gb
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
-#SBATCH --output=%j.log
-
-set -exuo pipefail
+#SBATCH --output=logs/%j.log
 
 module load python
 module load parallel
 
 if [[ $# -ne 3 ]]; then
-  echo "usage: $0 <sub> <task> <runs>"
+  echo "usage: $0 <sub> <task> <run>"
   exit 1
 fi
 
 GIT_HOME="$(git rev-parse --show-toplevel)"
 cd "$GIT_HOME" || exit
-
-job_id="$SLURM_JOB_ID"
-log_file="preprocessing/logs/$job_id.log"
+cd preprocessing
 
 sub="$1"
 task="$2"
-runs="$3"
+run="$3"
 
-python preprocessing/preprocess.py "$sub" "$task" "$runs" 2>&1 \
-  | tee -a "$log_file"
+python preprocess.py "$sub" "$task" "$run"
 
 printf "\n\n Preprocessing complete \n\n"

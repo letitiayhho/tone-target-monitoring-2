@@ -1,24 +1,17 @@
 #!/usr/bin/env python3
 
-import numpy as np
-import os.path as op
-from pprint import pformat
-from typing import Tuple, Iterator
-import time
+#SBATCH --time=01:00:00
+#SBATCH --partition=broadwl
+#SBATCH --ntasks=1
+#SBATCH --mem-per-cpu=48gb
+#SBATCH --mail-type=all
+#SBATCH --mail-user=letitiayhho@uchicago.edu
+#SBATCH --output=logs/%j.log
 
-# EEG utilities
-import mne
-from mne.preprocessing import ICA, create_eog_epochs
-from pyprep.prep_pipeline import PrepPipeline
-from autoreject import get_rejection_threshold, validation_curve
+import sys
+from util.io.preprocessing import *
 
-# BIDS utilities
-from mne_bids import BIDSPath, read_raw_bids
-from util.io.bids import DataSink
-from bids import BIDSLayout
-import util.io.preprocessing
-
-def main(sub, task, runs) -> None:
+def main(sub, task, run) -> None:
     # Constants
     BIDS_ROOT = '../data/bids'
     DERIV_ROOT = '../data/bids/derivatives'
@@ -29,8 +22,6 @@ def main(sub, task, runs) -> None:
     print("---------- Import data ----------")
     bids_path = get_bids_path(BIDS_ROOT, sub, task, run)
     print(bids_path)
-    if not bids_path.fpath.is_file(): # skip if file doesn't exist
-        continue
     raw = import_bids_data(bids_path)
     events, event_ids = read_events(raw)
 
@@ -51,11 +42,11 @@ def main(sub, task, runs) -> None:
     raw_for_ica = bandpass(raw, None, 1)
     raw = bandpass(raw, 270, 30)
 
-    epochs_for_ica = epoch(raw_for_ica)
-    epochs = epoch(raw)
+    epochs_for_ica = epoch(raw_for_ica, events, event_ids)
+    epochs = epoch(raw, events, event_ids)
 
     ica = compute_ICA(epochs_for_ica) # run ICA on less aggressively filtered data
-    epochs, ica = apply_ICA(epochs_for_ica, epochs) # apply ICA on more aggressively filtered data
+    epochs, ica = apply_ICA(epochs_for_ica, epochs, ica) # apply ICA on more aggressively filtered data
 
     # Baseline correct and reject trials
     print("---------- Baseline correct and reject trials ----------")
@@ -66,7 +57,8 @@ def main(sub, task, runs) -> None:
     print("---------- Save results and generate report ----------")
     fpath, sink = get_save_path(DERIV_ROOT, sub, task, run)
     save_preprocessed_data(fpath, epochs)
-    generate_report(fpath, sink, epochs, ica, bads, thres)
+    generate_report(fpath, sink, sub, task, run, epochs, ica, bads, thres)
+    print("Saving results and report to: " + str(fpath))
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
@@ -74,5 +66,5 @@ if __name__ == "__main__":
         sys.exit(1)
     sub = sys.argv[1]
     task = sys.argv[2]
-    runs = sys.argv[3]
-    main(sub, task, runs)
+    run = sys.argv[3]
+    main(sub, task, run)

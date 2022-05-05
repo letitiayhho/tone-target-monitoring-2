@@ -1,5 +1,6 @@
 import numpy as np
 import os.path as op
+import os
 from pprint import pformat
 from typing import Tuple, Iterator
 import time
@@ -80,7 +81,7 @@ def bandpass(raw, h_freq, l_freq):
     raw = raw.filter(l_freq = l_freq, h_freq = h_freq)
     return raw
 
-def epoch(raw):
+def epoch(raw, events, event_ids):
     epochs = mne.Epochs(
         raw,
         events,
@@ -97,7 +98,7 @@ def compute_ICA(epochs):
     ica = ica.fit(epochs, picks = ['eeg', 'eog'])
     return ica
 
-def apply_ICA(epochs_for_ica, epochs):
+def apply_ICA(epochs_for_ica, epochs, ica):
     eog_indices, eog_scores = ica.find_bads_eog(epochs_for_ica, threshold = 1.96)
     ica.exclude = eog_indices
     epochs = ica.apply(epochs) # apply to aggressively filtered version of data
@@ -130,25 +131,25 @@ def get_save_path(deriv_root, sub, task, run):
 def save_preprocessed_data(fpath, epochs):
     epochs.save(fpath, overwrite = True)
 
-def generate_report(fpath, sink, epochs, ica, bads, thres):
-    report = mne.Report(verbose = True)
-    report.parse_folder(op.dirname(fpath), pattern = '*epo.fif.gz', render_bem = False)
+def generate_report(fpath, sink, sub, task, run, epochs, ica, bads, thres):
+    report = mne.Report(title = 'MNE Report for sub-%s run-%s'%(sub, run), verbose = True)
+    report.parse_folder(op.dirname(fpath), pattern = '*run-%s*epo.fif.gz'%run, render_bem = False)
 
     # Plot the ERP
     fig_erp = epochs['50'].average().plot(spatial_colors = True)
-    report.add_figs_to_section(
+    report.add_figure(
         fig_erp,
-        captions = 'Average Evoked Response',
-        section = 'evoked'
+        caption = 'Average Evoked Response',
+        title = 'evoked'
     )
 
     # Plot the excluded ICAs
     if ica.exclude: # if we found any bad components
         fig_ica_removed = ica.plot_components(ica.exclude)
-        report.add_figs_to_section(
+        report.add_figure(
             fig_ica_removed,
-            captions = 'Removed ICA Components',
-            section = 'ICA'
+            caption = 'Removed ICA Components',
+            title = 'ICA'
         )
 
     # Format output
@@ -156,8 +157,8 @@ def generate_report(fpath, sink, epochs, ica, bads, thres):
     for line in pformat(bads).splitlines():
         html_lines.append('<br/>%s' % line)
     html = '\n'.join(html_lines)
-    report.add_htmls_to_section(html, captions = 'Interpolated Channels', section = 'channels')
-    report.add_htmls_to_section('<br/>threshold: {:0.2f} microvolts</br>'.format(thres['eeg'] * 1e6),
-                                captions = 'Trial Rejection Criteria', section = 'rejection')
-    report.add_htmls_to_section(epochs.info._repr_html_(), captions = 'Info', section = 'info')
-    report.save(op.join(sink.deriv_root, 'sub-%s.html'%sub), overwrite = True)
+    report.add_html(html, title = 'Interpolated Channels')
+    report.add_html('<br/>threshold: {:0.2f} microvolts</br>'.format(thres['eeg'] * 1e6),
+                                title = 'Trial Rejection Criteria')
+    report.add_html(epochs.info._repr_html_(), title = 'Info')
+    report.save(op.join(sink.deriv_root, 'sub-%s_task-%s_run-%s.html'%(sub, task, run)), open_browser = False, overwrite = True)
