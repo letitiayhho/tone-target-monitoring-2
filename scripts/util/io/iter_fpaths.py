@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import re
+import itertools
 from typing import Tuple, Iterator
 from mne_bids import BIDSPath, read_raw_bids, print_dir_tree
 from bids import BIDSLayout
