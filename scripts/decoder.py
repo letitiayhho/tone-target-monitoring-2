@@ -105,7 +105,7 @@ def main(fpath, sub, task, run) -> None:
         subject = sub,
         task = task,
         run = run,
-	    desc = 'log_reg',
+        desc = 'log_reg',
         suffix = 'scores',
         extension = 'npy',
     )
