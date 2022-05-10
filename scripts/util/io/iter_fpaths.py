@@ -26,5 +26,5 @@ def iter_fpaths(bids_root) -> Iterator[KeyType]:
     runs = list(itertools.chain(*runs))
 
     for i in range(len(fpaths)):
-        key = (fpaths[i], subs[i], 'tasks', runs[i])
+        key = (fpaths[i], subs[i], 'pitch', runs[i])
         yield key
