@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=00:20:00
+#SBATCH --time=00:10:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=5
-#SBATCH --mem-per-cpu=16gb
+#SBATCH --mem-per-cpu=8000
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
 #SBATCH --output=logs/decoding_%j.log
