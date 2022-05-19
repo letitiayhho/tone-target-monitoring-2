@@ -2,12 +2,12 @@
 
 import subprocess
 import sys
-from util.io.iter_fpaths import *
+from util.io.iter_BIDSPaths import *
 
 def main() -> None:
     BIDS_ROOT = '../data/bids'
 
-    for (fpath, sub, task, run) in iter_fpaths(BIDS_ROOT):
+    for (fpath, sub, task, run) in iter_BIDSPaths(BIDS_ROOT, False):
         subprocess.check_call("sbatch ./preprocess.py %s %s %s %s" % (fpath, sub, task, run), shell=True)
 
 if __name__ == "__main__":
