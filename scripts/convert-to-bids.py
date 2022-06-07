@@ -19,10 +19,22 @@ MAPS_DIR = '../data/captrak/' # where the mapping and electrode location files l
 # Run conversion on all files
 
 for (fname, sub, task, run) in iter_raw_paths(DATA_DIR):
+
+    # create output file name
+    bids_path = BIDSPath(
+        run = run,
+        subject = sub,
+        task = task,
+        datatype = 'eeg',
+        root = BIDS_DIR
+    )
+    if os.path.isfile(bids_path):
+        print(f'File {bids_path} exists, skipping {fname}')
+        continue
+    
+    # load data with MNE function for your file format
     fpath = os.path.join(DATA_DIR, fname)
     print(fpath)
-
-    # load data with MNE function for your file format
     raw = mne.io.read_raw_brainvision(fpath)
     raw.load_data()
     raw.set_channel_types({'Aux1': 'stim'})
@@ -50,14 +62,6 @@ for (fname, sub, task, run) in iter_raw_paths(DATA_DIR):
     annot = mne.annotations_from_events(events, sfreq = raw.info['sfreq'], event_desc = event_names)
     raw.set_annotations(annot)
 
-    # build appropriate BIDS directory structure
-    bids_path = BIDSPath(
-        run = run,
-        subject = sub,
-        task = task,
-        datatype = 'eeg',
-        root = BIDS_DIR
-    )
 
     # get range of dates the BIDS specification will accept
     daysback_min, daysback_max = get_anonymization_daysback(raw)
