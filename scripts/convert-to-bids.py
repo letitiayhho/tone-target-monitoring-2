@@ -22,9 +22,15 @@ fnames = os.listdir(DATA_DIR)
 fnames = [f for f in fnames if '.vhdr' in f] # filter for .vhdr files
 
 # Get subject list from file order
-filter_subs = re.compile('letty_subj_(\w?).*') # create regex filter
-subs = list(map(filter_subs.findall, fnames)) # extract subject numbers with filter
-subs = list(itertools.chain(*subs)) # flatten then nested list
+filt = re.compile('(([0-9]|[1-9][0-9]|[1-9][0-9][0-9]){1,2})')
+subs = list(map(lambda x: (re.search(filt, x)).group(0), fnames))
+#subs = []
+#for strings in fnames:
+#    match = re.search('(([0-9]|[1-9][0-9]|[1-9][0-9][0-9]){1,2})', string)
+#    subs.append(match.group(0))
+#filter_subs = re.compile('letty_subj_(\w?).*') # create regex filter
+#subs = list(map(filter_subs.findall, fnames)) # extract subject numbers with filter
+#subs = list(itertools.chain(*subs)) # flatten then nested list
 
 # Get a task list
 tasks = ['pitch']*len(subs) # broadcast the only task name
