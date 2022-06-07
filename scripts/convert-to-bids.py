@@ -7,6 +7,8 @@ import itertools
 import mne
 import os
 import re
+from util.io.get_chan_mapping import get_chan_mapping
+from util.io.iter_raw_paths import iter_raw_paths
 
 # Constants
 DATA_DIR = '../data/raw/' # where our data currently lives
@@ -77,11 +79,8 @@ MAPS_DIR = '../data/captrak/' # where the mapping and electrode location files l
 
 # Run conversion on all files
 
-for i in range(len(fnames)):
-    sub = subs[i]
-    task = tasks[i]
-    run = runs[i]
-    fpath = os.path.join(DATA_DIR, fnames[i])
+for (fname, sub, task, run) in iter_raw_paths(DATA_DIR):
+    fpath = os.path.join(DATA_DIR, fname)
     print(fpath)
 
     # load data with MNE function for your file format
@@ -93,12 +92,12 @@ for i in range(len(fnames)):
     raw.info['line_freq'] = 60 # the power line frequency in the building we collected in
 
     # map channel numbers to channel names
-    mapping = get_mapping(sub, special_mappings)
+    mapping = get_chan_mapping(MAPS_DIR, sub)
     raw.rename_channels(mapping)
     raw.add_reference_channels(ref_channels = ['Cz'])
 
     # map channels to their coordinates
-    dig = mne.channels.read_dig_captrak(MAPS_DIR + 'subj_' + sub + '.bvct')
+    dig = mne.channels.read_dig_captrak(MAPS_DIR + 'subj-' + sub + '.bvct')
     raw.set_montage(dig, on_missing = 'warn')
 
     # # drop meaningless event name
