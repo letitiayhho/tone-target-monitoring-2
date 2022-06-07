@@ -46,32 +46,32 @@ MAPS_DIR = '../data/captrak/' # where the mapping and electrode location files l
 # Retrieve mappings between channel numbers and channel names
 
 # For subj 2, 3, 5, 6
-mapping_table = pd.read_csv(MAPS_DIR + 'pitch_tracking_64_at_IZ.csv')
-mapping_64_at_IZ = {mapping_table.number[i]: mapping_table.name[i] for i in range(len(mapping_table))}
-
-# For subj 4 IZ is excluded but channel 64 is not moved to FCZ
-mapping_table = pd.read_csv(MAPS_DIR + 'pitch_tracking_no_IZ.csv')
-mapping_no_IZ = {mapping_table.number[i]: mapping_table.name[i] for i in range(len(mapping_table))}
-
-# For subj 7, and onwards
-mapping_table = pd.read_csv(MAPS_DIR + 'pitch_tracking_64_at_FCZ.csv')
-mapping_64_at_FCZ = {mapping_table.number[i]: mapping_table.name[i] for i in range(len(mapping_table))}
-
-# Create dict for subjects and their mappings
-special_mappings = {'2': mapping_64_at_IZ,
-           '3': mapping_64_at_IZ,
-           '4': mapping_no_IZ,
-           '5': mapping_64_at_IZ,
-           '6': mapping_64_at_IZ,
-           }
-
-# Create function to fetch correct mapping
-def get_mapping(sub, special_mappings):
-    if sub in special_mappings.keys():
-        mapping = special_mappings[sub]
-    else:
-        mapping = mapping_64_at_FCZ
-    return mapping
+#mapping_table = pd.read_csv(MAPS_DIR + 'pitch_tracking_64_at_IZ.csv')
+#mapping_64_at_IZ = {mapping_table.number[i]: mapping_table.name[i] for i in range(len(mapping_table))}
+#
+## For subj 4 IZ is excluded but channel 64 is not moved to FCZ
+#mapping_table = pd.read_csv(MAPS_DIR + 'pitch_tracking_no_IZ.csv')
+#mapping_no_IZ = {mapping_table.number[i]: mapping_table.name[i] for i in range(len(mapping_table))}
+#
+## For subj 7, and onwards
+#mapping_table = pd.read_csv(MAPS_DIR + 'pitch_tracking_64_at_FCZ.csv')
+#mapping_64_at_FCZ = {mapping_table.number[i]: mapping_table.name[i] for i in range(len(mapping_table))}
+#
+## Create dict for subjects and their mappings
+#special_mappings = {'2': mapping_64_at_IZ,
+#           '3': mapping_64_at_IZ,
+#           '4': mapping_no_IZ,
+#           '5': mapping_64_at_IZ,
+#           '6': mapping_64_at_IZ,
+#           }
+#
+## Create function to fetch correct mapping
+#def get_mapping(sub, special_mappings):
+#    if sub in special_mappings.keys():
+#        mapping = special_mappings[sub]
+#    else:
+#        mapping = mapping_64_at_FCZ
+#    return mapping
 
 
 
