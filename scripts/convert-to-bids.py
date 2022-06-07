@@ -11,71 +11,10 @@ from util.io.get_chan_mapping import get_chan_mapping
 from util.io.iter_raw_paths import iter_raw_paths
 
 # Constants
+
 DATA_DIR = '../data/raw/' # where our data currently lives
 BIDS_DIR = '../data/bids/' # where we want it to live
 MAPS_DIR = '../data/captrak/' # where the mapping and electrode location files live
-
-
-
-# Parse filenames
-
-# Get filenames and digest them
-#fnames = os.listdir(DATA_DIR)
-#fnames = [f for f in fnames if '.vhdr' in f] # filter for .vhdr files
-
-# Get subject list from file order
-#filt = re.compile('(([0-9]|[1-9][0-9]|[1-9][0-9][0-9]){1,2})')
-#subs = list(map(lambda x: (re.search(filt, x)).group(0), fnames))
-#subs = []
-#for strings in fnames:
-#    match = re.search('(([0-9]|[1-9][0-9]|[1-9][0-9][0-9]){1,2})', string)
-#    subs.append(match.group(0))
-#filter_subs = re.compile('letty_subj_(\w?).*') # create regex filter
-#subs = list(map(filter_subs.findall, fnames)) # extract subject numbers with filter
-#subs = list(itertools.chain(*subs)) # flatten then nested list
-
-# Get a task list
-#tasks = ['pitch']*len(subs) # broadcast the only task name
-
-# Get a run list
-#filter_runs = re.compile('\w+[0-9]_([0-9]).*')
-#runs = list(map(filter_runs.findall, fnames))
-#runs = ['1' if x == [] else x for x in runs]
-#runs = list(itertools.chain(*runs))
-
-
-
-# Retrieve mappings between channel numbers and channel names
-
-# For subj 2, 3, 5, 6
-#mapping_table = pd.read_csv(MAPS_DIR + 'pitch_tracking_64_at_IZ.csv')
-#mapping_64_at_IZ = {mapping_table.number[i]: mapping_table.name[i] for i in range(len(mapping_table))}
-#
-## For subj 4 IZ is excluded but channel 64 is not moved to FCZ
-#mapping_table = pd.read_csv(MAPS_DIR + 'pitch_tracking_no_IZ.csv')
-#mapping_no_IZ = {mapping_table.number[i]: mapping_table.name[i] for i in range(len(mapping_table))}
-#
-## For subj 7, and onwards
-#mapping_table = pd.read_csv(MAPS_DIR + 'pitch_tracking_64_at_FCZ.csv')
-#mapping_64_at_FCZ = {mapping_table.number[i]: mapping_table.name[i] for i in range(len(mapping_table))}
-#
-## Create dict for subjects and their mappings
-#special_mappings = {'2': mapping_64_at_IZ,
-#           '3': mapping_64_at_IZ,
-#           '4': mapping_no_IZ,
-#           '5': mapping_64_at_IZ,
-#           '6': mapping_64_at_IZ,
-#           }
-#
-## Create function to fetch correct mapping
-#def get_mapping(sub, special_mappings):
-#    if sub in special_mappings.keys():
-#        mapping = special_mappings[sub]
-#    else:
-#        mapping = mapping_64_at_FCZ
-#    return mapping
-
-
 
 # Run conversion on all files
 
@@ -100,11 +39,11 @@ for (fname, sub, task, run) in iter_raw_paths(DATA_DIR):
     dig = mne.channels.read_dig_captrak(MAPS_DIR + 'subj-' + sub + '.bvct')
     raw.set_montage(dig, on_missing = 'warn')
 
-    # # drop meaningless event name
+    # drop meaningless event name
     events, event_ids = mne.events_from_annotations(raw)
     events = events[events[:,2] != event_ids['New Segment/'], :]
 
-    # # rename events to their stimulus pitch
+    # rename events to their stimulus pitch
     event_codes = events[:,2]
     baseline_code = np.argmax(np.bincount(event_codes)) # the one with more trials
     event_names = {1: '50', 2: '100', 3: '150', 4: '200', 5: '250'}
@@ -132,8 +71,6 @@ for (fname, sub, task, run) in iter_raw_paths(DATA_DIR):
         anonymize = dict(daysback = daysback_min), # shift dates by daysback
         overwrite = True,
     )
-
-
 
 # Check output files
 
