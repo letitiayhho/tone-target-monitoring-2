@@ -18,12 +18,12 @@ MAPS_DIR = '../data/captrak/' # where the mapping and electrode location files l
 # Parse filenames
 
 # Get filenames and digest them
-fnames = os.listdir(DATA_DIR)
-fnames = [f for f in fnames if '.vhdr' in f] # filter for .vhdr files
+#fnames = os.listdir(DATA_DIR)
+#fnames = [f for f in fnames if '.vhdr' in f] # filter for .vhdr files
 
 # Get subject list from file order
-filt = re.compile('(([0-9]|[1-9][0-9]|[1-9][0-9][0-9]){1,2})')
-subs = list(map(lambda x: (re.search(filt, x)).group(0), fnames))
+#filt = re.compile('(([0-9]|[1-9][0-9]|[1-9][0-9][0-9]){1,2})')
+#subs = list(map(lambda x: (re.search(filt, x)).group(0), fnames))
 #subs = []
 #for strings in fnames:
 #    match = re.search('(([0-9]|[1-9][0-9]|[1-9][0-9][0-9]){1,2})', string)
@@ -33,13 +33,13 @@ subs = list(map(lambda x: (re.search(filt, x)).group(0), fnames))
 #subs = list(itertools.chain(*subs)) # flatten then nested list
 
 # Get a task list
-tasks = ['pitch']*len(subs) # broadcast the only task name
+#tasks = ['pitch']*len(subs) # broadcast the only task name
 
 # Get a run list
-filter_runs = re.compile('\w+[0-9]_([0-9]).*')
-runs = list(map(filter_runs.findall, fnames))
-runs = ['1' if x == [] else x for x in runs]
-runs = list(itertools.chain(*runs))
+#filter_runs = re.compile('\w+[0-9]_([0-9]).*')
+#runs = list(map(filter_runs.findall, fnames))
+#runs = ['1' if x == [] else x for x in runs]
+#runs = list(itertools.chain(*runs))
 
 
 
