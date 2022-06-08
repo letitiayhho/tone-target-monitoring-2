@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=00:10:00
+#SBATCH --time=06:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=5
+#SBATCH --ntasks-per-node=4
 #SBATCH --mem-per-cpu=8000
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
@@ -105,7 +105,7 @@ def main(fpath, sub, task, run) -> None:
         subject = sub,
         task = task,
         run = run,
-        desc = 'log_reg',
+        desc = 'log_regCV',
         suffix = 'scores',
         extension = 'npy',
     )
@@ -123,7 +123,7 @@ def main(fpath, sub, task, run) -> None:
     ax.set_title('Sensor space decoding')
 
     # Save plot
-    fig_fpath = FIGS_ROOT + '/subj-' + sub + '_' + 'task-pitch_' + 'run-' + run + '.png'
+    fig_fpath = FIGS_ROOT + '/subj-' + sub + '_' + 'task-pitch_' + 'run-' + run + '_log-regCV_' + '.png'
     print('Saving figure to: ' + fig_fpath)
     plt.savefig(fig_fpath)
 
