@@ -11,12 +11,11 @@ def iter_fpaths(bids_root) -> Iterator[KeyType]:
     # Get filepaths
     layout = BIDSLayout(bids_root, derivatives = True)
     fpaths = layout.get(scope = 'preprocessing',
-                        extension = 'fif.gz',
-                        return_type = 'filename')
-    fpaths.pop(0)
+        extension = 'fif.gz',
+        return_type = 'filename')
 
     # Get corresponding subject number
-    filter_subs = re.compile('sub-(\d)_')
+    filter_subs = re.compile('sub-(\d{1,2})_')
     subs = list(map(filter_subs.findall, fpaths))
     subs = list(itertools.chain(*subs))
 
@@ -27,4 +26,5 @@ def iter_fpaths(bids_root) -> Iterator[KeyType]:
 
     for i in range(len(fpaths)):
         key = (fpaths[i], subs[i], 'pitch', runs[i])
+        print(key)
         yield key
