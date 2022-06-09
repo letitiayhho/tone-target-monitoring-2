@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=06:00:00
+#SBATCH --time=01:00:00
 #SBATCH --partition=broadwl
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=4
@@ -29,8 +29,7 @@ from mne.decoding import SlidingEstimator, cross_val_multiscore
 from util.io.bids import DataSink
 from util.io.iter_fpaths import iter_fpaths
 
-# for (fpath, sub, task, run) in iter_fpaths(BIDS_ROOT):
-def main(fpath, sub, task, run) -> None:
+def main(fpath, sub, task, run):
     BIDS_ROOT = '../data/bids'
     DERIV_ROOT = '../data/bids/derivatives'
     FIGS_ROOT = '../figs'
@@ -40,6 +39,7 @@ def main(fpath, sub, task, run) -> None:
     np.random.seed(0)
 
     print("---------- Load data ----------")
+    print(fpath)
     epochs = mne.read_epochs(fpath)
     epochs = epochs.crop(tmin = 0)
     events = mne.read_events(fpath)
