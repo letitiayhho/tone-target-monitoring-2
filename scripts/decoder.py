@@ -27,7 +27,6 @@ from sklearn.linear_model import LogisticRegressionCV
 from mne.decoding import SlidingEstimator, cross_val_multiscore
 
 from util.io.bids import DataSink
-from util.io.iter_fpaths import iter_fpaths
 
 def main(fpath, sub, task, run):
     BIDS_ROOT = '../data/bids'
