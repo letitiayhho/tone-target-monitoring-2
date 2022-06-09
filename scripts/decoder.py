@@ -23,7 +23,7 @@ from bids import BIDSLayout
 from sklearn.pipeline import make_pipeline
 from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegressionCV
 from mne.decoding import SlidingEstimator, cross_val_multiscore
 
 from util.io.bids import DataSink
@@ -80,7 +80,7 @@ def main(fpath, sub, task, run):
 
     clf = make_pipeline(
         StandardScaler(),
-        LogisticRegression(solver = 'liblinear')
+        LogisticRegressionCV(solver = 'liblinear')
     )
 
     print("Creating sliding estimators")
@@ -123,7 +123,7 @@ def main(fpath, sub, task, run):
     ax.set_title('Sensor space decoding')
 
     # Save plot
-    fig_fpath = FIGS_ROOT + '/subj-' + sub + '_' + 'task-pitch_' + 'run-' + run + '_log-regCV_' + '.png'
+    fig_fpath = FIGS_ROOT + '/subj-' + sub + '_' + 'task-pitch_' + 'run-' + run + 'log_reg' + '.png'
     print('Saving figure to: ' + fig_fpath)
     plt.savefig(fig_fpath)
 
