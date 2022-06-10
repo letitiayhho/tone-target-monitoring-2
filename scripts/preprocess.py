@@ -11,7 +11,7 @@
 import sys
 from util.io.preprocessing import *
 
-def main(fpath, sub, task, run) -> None:
+def main(sub, task, run) -> None:
     # Constants
     BIDS_ROOT = '../data/bids'
     DERIV_ROOT = '../data/bids/derivatives'
@@ -20,8 +20,6 @@ def main(fpath, sub, task, run) -> None:
 
     # Import data
     print("---------- Import data ----------")
-    print(fpath)
-    raw = import_bids_data(fpath)
     events, event_ids = read_events(raw)
 
     # Create virtual EOGs
@@ -59,12 +57,13 @@ def main(fpath, sub, task, run) -> None:
     generate_report(fpath, sink, sub, task, run, epochs, ica, bads, thres)
     print("Saving results and report to: " + str(fpath))
 
+__doc__ = "Usage: ./preprocess.py <sub> <task> <run>"
+
 if __name__ == "__main__":
     if len(sys.argv) != 4:
         print(__doc__)
         sys.exit(1)
-    fpath = sys.argv[1]
-    sub = sys.argv[2]
-    task = sys.argv[3]
-    run = sys.argv[4]
-    main(fpath, sub, task, run)
+    sub = sys.argv[1]
+    task = sys.argv[2]
+    run = sys.argv[3]
+    main(sub, task, run)

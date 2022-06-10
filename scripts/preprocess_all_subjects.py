@@ -8,7 +8,7 @@ def main() -> None:
     BIDS_ROOT = '../data/bids'
 
     for (fpath, sub, task, run) in iter_BIDSPaths(BIDS_ROOT, False):
-        subprocess.check_call("sbatch ./preprocess.py %s %s %s %s" % (fpath, sub, task, run), shell=True)
+        subprocess.check_call("sbatch ./preprocess.py %s %s %s" % (sub, task, run), shell=True)
 
 if __name__ == "__main__":
     if len(sys.argv) != 1:

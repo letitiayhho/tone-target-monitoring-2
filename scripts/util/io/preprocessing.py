@@ -27,16 +27,22 @@ def fpaths() -> Iterator[KeyType]:
                 key = (sub, task, run)
                 yield key
 
-def get_bids_path(bids_root, sub, task, run):
+#def get_bids_path(bids_root, sub, task, run):
+#    bids_path = BIDSPath(root = bids_root,
+#                        subject = sub,
+#                        task = task,
+#                        run = run,
+#                        datatype = 'eeg',
+#                        )
+#    return bids_path
+
+def import_bids_data(bids_root, sub, task, run):
     bids_path = BIDSPath(root = bids_root,
                         subject = sub,
                         task = task,
                         run = run,
                         datatype = 'eeg',
                         )
-    return bids_path
-
-def import_bids_data(bids_path):
     raw = read_raw_bids(bids_path, verbose = False)
     raw = raw.pick_types(eeg = True)
     return raw
