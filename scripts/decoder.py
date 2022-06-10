@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=01:00:00
+#SBATCH --time=00:15:00 # only need 15 minutes for regular logreg, need like 4 hrs for logregcv
 #SBATCH --partition=broadwl
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=4
@@ -23,7 +23,7 @@ from bids import BIDSLayout
 from sklearn.pipeline import make_pipeline
 from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegressionCV
+from sklearn.linear_model import LogisticRegression
 from mne.decoding import SlidingEstimator, cross_val_multiscore
 
 from util.io.bids import DataSink
@@ -79,7 +79,7 @@ def main(fpath, sub, task, run):
 
     clf = make_pipeline(
         StandardScaler(),
-        LogisticRegressionCV(solver = 'liblinear')
+        LogisticRegression(solver = 'liblinear')
     )
 
     print("Creating sliding estimators")
@@ -104,7 +104,7 @@ def main(fpath, sub, task, run):
         subject = sub,
         task = task,
         run = run,
-        desc = 'log_regCV',
+        desc = 'log_reg',
         suffix = 'scores',
         extension = 'npy',
     )
