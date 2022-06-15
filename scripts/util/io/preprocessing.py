@@ -128,7 +128,7 @@ def get_save_path(deriv_root, sub, task, run):
                     subject = sub,
                     task = task,
                     run = run,
-                    desc = 'clean',
+                    desc = 'clean_5khz',
                     suffix = 'epo', # this suffix is following MNE, not BIDS, naming conventions
                     extension = 'fif.gz',
                     )
