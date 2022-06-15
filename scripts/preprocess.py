@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=01:00:00
+#SBATCH --time=01:30:00
 #SBATCH --partition=broadwl
 #SBATCH --ntasks=1
 #SBATCH --mem-per-cpu=48gb
@@ -16,10 +16,11 @@ def main(sub, task, run) -> None:
     BIDS_ROOT = '../data/bids'
     DERIV_ROOT = '../data/bids/derivatives'
     LOWPASS = 300
-    FS = 2000
+    #FS = 2000
 
     # Import data
     print("---------- Import data ----------")
+    raw = import_bids_data(BIDS_ROOT, sub, task, run)
     events, event_ids = read_events(raw)
 
     # Create virtual EOGs
@@ -31,7 +32,7 @@ def main(sub, task, run) -> None:
 
     # Resampling and PREP
     print("---------- Resampling and PREP ----------")
-    raw, events = resample(raw, FS, events)
+    #raw, events = resample(raw, FS, events)
     raw, bads = run_PREP(raw, sub, run, LOWPASS)
 
     # Run ICA on one copy of the data
