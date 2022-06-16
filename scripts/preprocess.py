@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 #SBATCH --time=01:30:00
-#SBATCH --partition=broadwl
+#SBATCH --partition=bigmem2
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=48G
+#SBATCH --mem-per-cpu=128G
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
 #SBATCH --output=logs/%j.log
@@ -21,6 +21,7 @@ def main(sub, task, run) -> None:
 
     # Import data
     print("---------- Import data ----------")
+    print(sub, task, run)
     raw = import_bids_data(BIDS_ROOT, sub, task, run)
     events, event_ids = read_events(raw)
 
