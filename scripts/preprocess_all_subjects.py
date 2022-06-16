@@ -12,9 +12,9 @@ def main(subs, skips) -> None:
         # if subs were given but sub is not in subs, don't preprocess
         if bool(subs) and sub not in subs:
             continue
+        # if sub in skips, don't preprocess
         if sub in skips:
             continue
-        #print("sbatch ./preprocess.py {sub} {task} {run}")
         subprocess.check_call("sbatch ./preprocess.py %s %s %s" % (sub, task, run), shell=True)
 
 if __name__ == "__main__":
