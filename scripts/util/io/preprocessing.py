@@ -43,6 +43,7 @@ def import_bids_data(bids_root, sub, task, run):
                         run = run,
                         datatype = 'eeg',
                         )
+    print(bids_path)
     raw = read_raw_bids(bids_path, verbose = False)
     raw = raw.pick_types(eeg = True)
     return raw
@@ -128,7 +129,7 @@ def get_save_path(deriv_root, sub, task, run):
                     subject = sub,
                     task = task,
                     run = run,
-                    desc = 'clean',
+                    desc = 'clean_5khz',
                     suffix = 'epo', # this suffix is following MNE, not BIDS, naming conventions
                     extension = 'fif.gz',
                     )

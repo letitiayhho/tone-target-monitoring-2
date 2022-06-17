@@ -40,12 +40,13 @@ def main(fpath, sub, task, run):
     print("---------- Load data ----------")
     print(fpath)
     epochs = mne.read_epochs(fpath)
-    epochs = epochs.crop(tmin = 0)
+    #epochs = epochs.crop(tmin = 0)
     events = mne.read_events(fpath)
 
     # Compute power
     print("---------- Compute power ----------")
-    n_cycles = STIM_FREQS / 7.  # different number of cycle per frequency
+    n_cycles = STIM_FREQS / 16 # different number of cycle per frequency
+                               # higher constant, fewer windows, maybe?
     power = tfr_morlet(epochs,
                        freqs = STIM_FREQS,
                        n_cycles = n_cycles,
@@ -61,6 +62,7 @@ def main(fpath, sub, task, run):
     n_channels = np.shape(power)[1]
     n_freqs = np.shape(power)[2]
     n_windows = np.shape(power)[3]
+    print("n_windows: " + str(n_windows))
 
     # Reshape for classifier
     X = power.reshape((n_epochs, n_freqs * n_channels, n_windows)) # Set order to preserve epoch order
@@ -104,7 +106,7 @@ def main(fpath, sub, task, run):
         subject = sub,
         task = task,
         run = run,
-        desc = 'log_reg',
+        desc = 'log_reg_no_crop',
         suffix = 'scores',
         extension = 'npy',
     )
@@ -122,7 +124,7 @@ def main(fpath, sub, task, run):
     ax.set_title('Sensor space decoding')
 
     # Save plot
-    fig_fpath = FIGS_ROOT + '/subj-' + sub + '_' + 'task-pitch_' + 'run-' + run + 'log_reg' + '.png'
+    fig_fpath = FIGS_ROOT + '/subj-' + sub + '_' + 'task-pitch_' + 'run-' + run + 'log_reg_no_crop' + '.png'
     print('Saving figure to: ' + fig_fpath)
     plt.savefig(fig_fpath)
 

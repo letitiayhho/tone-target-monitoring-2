@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=01:00:00
-#SBATCH --partition=broadwl
+#SBATCH --time=01:30:00
+#SBATCH --partition=bigmem2
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=48gb
+#SBATCH --mem-per-cpu=128G
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
 #SBATCH --output=logs/%j.log
 
 import sys
+import gc
 from util.io.preprocessing import *
 
 def main(sub, task, run) -> None:
@@ -16,10 +17,12 @@ def main(sub, task, run) -> None:
     BIDS_ROOT = '../data/bids'
     DERIV_ROOT = '../data/bids/derivatives'
     LOWPASS = 300
-    FS = 2000
+    #FS = 2000
 
     # Import data
     print("---------- Import data ----------")
+    print(sub, task, run)
+    raw = import_bids_data(BIDS_ROOT, sub, task, run)
     events, event_ids = read_events(raw)
 
     # Create virtual EOGs
@@ -31,7 +34,7 @@ def main(sub, task, run) -> None:
 
     # Resampling and PREP
     print("---------- Resampling and PREP ----------")
-    raw, events = resample(raw, FS, events)
+    #raw, events = resample(raw, FS, events)
     raw, bads = run_PREP(raw, sub, run, LOWPASS)
 
     # Run ICA on one copy of the data
@@ -41,6 +44,9 @@ def main(sub, task, run) -> None:
 
     epochs_for_ica = epoch(raw_for_ica, events, event_ids)
     epochs = epoch(raw, events, event_ids)
+    del raw_for_ica
+    del raw
+    gc.collect()
 
     ica = compute_ICA(epochs_for_ica) # run ICA on less aggressively filtered data
     epochs, ica = apply_ICA(epochs_for_ica, epochs, ica) # apply ICA on more aggressively filtered data
