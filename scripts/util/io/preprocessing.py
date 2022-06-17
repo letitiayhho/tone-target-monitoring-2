@@ -134,10 +134,11 @@ def get_save_path(deriv_root, sub, task, run):
                     )
     return fpath, sink
 
-def save_preprocessed_data(fpath, epochs):
+def save_and_generate_report(fpath, epochs, sink, sub, task, run, ica, bads, thres):
+    # Save
     epochs.save(fpath, overwrite = True)
 
-def generate_report(fpath, sink, sub, task, run, epochs, ica, bads, thres):
+    # Initialize report
     report = mne.Report(title = 'MNE Report for sub-%s run-%s'%(sub, run), verbose = True)
     report.parse_folder(op.dirname(fpath), pattern = '*run-%s*epo.fif.gz'%run, render_bem = False)
 
