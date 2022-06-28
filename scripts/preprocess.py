@@ -59,8 +59,7 @@ def main(sub, task, run) -> None:
     # Save results and generate report
     print("---------- Save results and generate report ----------")
     fpath, sink = get_save_path(DERIV_ROOT, sub, task, run)
-    save_preprocessed_data(fpath, epochs)
-    generate_report(fpath, sink, sub, task, run, epochs, ica, bads, thres)
+    save_and_generate_report(fpath, epochs, sink, sub, task, run, ica, bads, thres)
     print("Saving results and report to: " + str(fpath))
 
 __doc__ = "Usage: ./preprocess.py <sub> <task> <run>"
