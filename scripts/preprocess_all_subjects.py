@@ -25,7 +25,6 @@ if __name__ == "__main__":
     subs = args.subs
     skips = args.skips
     print(f"subs: {subs}, skips : {skips}")
-    if bool(set(subs) & set(skips)):
-        overlap = list(set(subs) & set(skips))
-        raise ValueError(f'Subs {overlap} in subs and skips')
+    if bool(subs) & bool(skips):
+        raise ValueError('Cannot specify both subs and skips')
     main(subs, skips)
