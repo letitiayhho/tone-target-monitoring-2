@@ -29,7 +29,7 @@ for file in files:
 
     # move file
     print(f'moved {file} to {new_file}')
-#    shutil.move(
-#        file,
-#        new_file,
-#        )
+    shutil.move(
+        file,
+        new_file,
+        )
