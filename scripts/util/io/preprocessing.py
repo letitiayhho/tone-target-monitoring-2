@@ -170,4 +170,4 @@ def save_and_generate_report(fpath, epochs, sink, sub, task, run, ica, bads, thr
     report.add_html('<br/>threshold: {:0.2f} microvolts</br>'.format(thres['eeg'] * 1e6),
                                 title = 'Trial Rejection Criteria')
     report.add_html(epochs.info._repr_html_(), title = 'Info')
-    report.save(op.join(sink.deriv_root, 'sub-%s_task-%s_run-%s.html'%(sub, task, run)), open_browser = False, overwrite = True)
+    report.save(op.join(sink.deriv_root, 'sub-%s_task-%s_run-%s_res-hi.html'%(sub, task, run)), open_browser = False, overwrite = True)
