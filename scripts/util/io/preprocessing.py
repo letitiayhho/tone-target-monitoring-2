@@ -129,11 +129,13 @@ def get_save_path(deriv_root, sub, task, run):
                     subject = sub,
                     task = task,
                     run = run,
-                    res = 'hi',
-                    desc = 'clean',
+                    desc = 'TEST',
                     suffix = 'epo', # this suffix is following MNE, not BIDS, naming conventions
                     extension = 'fif.gz',
                     )
+    fpath_split = fpath.split('_')
+    fpath_split.insert(3, 'res-hi')
+    fpath = '_'.join(fpath_split)
     return fpath, sink
 
 def save_and_generate_report(fpath, epochs, sink, sub, task, run, ica, bads, thres):
@@ -142,7 +144,7 @@ def save_and_generate_report(fpath, epochs, sink, sub, task, run, ica, bads, thr
 
     # Initialize report
     report = mne.Report(title = 'MNE Report for sub-%s run-%s'%(sub, run), verbose = True)
-    report.parse_folder(op.dirname(fpath), pattern = '*run-%s*epo.fif.gz'%run, render_bem = False)
+    report.parse_folder(op.dirname(fpath), pattern = '*run-%s*epoTEST.fif.gz'%run, render_bem = False)
 
     # Plot the ERP
     fig_erp = epochs['50'].average().plot(spatial_colors = True)
