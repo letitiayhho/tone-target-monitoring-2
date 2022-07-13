@@ -27,21 +27,21 @@ def main(fpath, sub, task, run):
     FS = 5000
     CONDITION_FREQS = [50, 100, 150, 200, 250]
     
-    # Get metadata
-    n_freqs = len(CONDITION_FREQS)
-    n_epochs = np.shape(epochs)[0]
-    n_chans = np.shape(epochs)[1]
-    
     # Read data
     epochs = mne.read_epochs(fpath)
     events = epochs.events
     epochs = epochs.get_data()
     
+    # Get metadata
+    n_freqs = len(CONDITION_FREQS)
+    n_epochs = np.shape(epochs)[0]
+    n_chans = np.shape(epochs)[1]
+    
     # Compute stft across all channels
     Zxxs = np.empty([n_epochs, n_chans, n_freqs, 19]) # n_epochs, n_chans, n_freqs, n_windows
     for chan in range(n_chans):
         x = pd.DataFrame(epochs[:, chan, :])
-        f, t, Zxx = get_stft_for_one_channel(x, FS, CONDITION_FREQS)
+        f, t, Zxx = get_stft_for_one_channel(x, FS, n_epochs, CONDITION_FREQS)
         Zxxs[:, chan, :, :] = Zxx
         
     # Reshape for decoder
@@ -50,9 +50,9 @@ def main(fpath, sub, task, run):
     # Save powers and events
     sink = DataSink(DERIV_ROOT, 'decoding')
     stft_fpath = sink.get_path(
-        subject = SUB,
-        task = TASK,
-        run = RUN,
+        subject = sub,
+        task = task,
+        run = run,
         desc = 'stft',
         suffix = 'power',
         extension = 'npy',

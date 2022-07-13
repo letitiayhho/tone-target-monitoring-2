@@ -1,7 +1,7 @@
 import numpy as np
 from scipy import signal
 
-def summarize_stft(f, Zxx, condition_freqs): # approximate power at the condition freqs
+def summarize_stft(f, Zxx, n_epochs, condition_freqs): # approximate power at the condition freqs
     Zxx_condensed = np.empty([n_epochs, len(condition_freqs), 19])
     
     for i in range(len(condition_freqs)):
@@ -20,13 +20,13 @@ def summarize_stft(f, Zxx, condition_freqs): # approximate power at the conditio
     
     return Zxx_condensed
 
-def get_stft_for_one_channel(x, fs, condition_freqs): # where x is n_epochs, n_windows
+def get_stft_for_one_channel(x, fs, n_epochs, condition_freqs): # where x is n_epochs, n_windows
     f, t, Zxx = signal.stft(x, fs) 
 
     # Take real values
     Zxx = np.abs(Zxx)
     
     # Summarize to frequencies of interest
-    Zxx = summarize_stft(f, Zxx, condition_freqs)
+    Zxx = summarize_stft(f, Zxx, n_epochs, condition_freqs)
     
     return (f, t, Zxx)

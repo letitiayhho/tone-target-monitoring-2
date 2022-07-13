@@ -10,6 +10,7 @@
 #SBATCH --output=logs/decoding_%j.log
 
 import mne
+import sys
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -21,8 +22,7 @@ from mne.decoding import SlidingEstimator, cross_val_multiscore
 
 from util.io.bids import DataSink
 
-def main(Zxxs, events):
-    X = Zxxs
+def main(sub, task, run, Zxxs, events):
 
     # Create target array
     labels = pd.Series(events[:, 2])
@@ -46,7 +46,7 @@ def main(Zxxs, events):
     print("Fit estimators")
     scores = cross_val_multiscore(
         time_decod,
-        X, # a trials x features x time array
+        Zxxs, # a trials x features x time array
         y, # an (n_trials,) array of integer condition labels
         cv = 5, # use stratified 5-fold cross-validation
         n_jobs = -1, # use all available CPU cores
@@ -78,14 +78,17 @@ def main(Zxxs, events):
     ax.set_title('Sensor space decoding')
 
     # Save plot
-    fig_fpath = FIGS_ROOT + '/subj-' + SUB + '_' + 'task-pitch_' + 'run-' + RUN + '_stft' + '.png'
+    fig_fpath = FIGS_ROOT + '/subj-' + sub + '_' + 'task-pitch_' + 'run-' + run + '_stft' + '.png'
     print('Saving figure to: ' + fig_fpath)
     plt.savefig(fig_fpath)
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 6:
         print(__doc__)
         sys.exit(1)
-    Zxxs = sys.argv[1]
-    events = sys.argv[2]
+    sub = sys.argv[1]
+    task = sys.argv[2]
+    run = sys.argv[3]
+    Zxxs = sys.argv[4]
+    events = sys.argv[5]
     main(Zxxs, events)
