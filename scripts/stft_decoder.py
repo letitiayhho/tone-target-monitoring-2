@@ -23,19 +23,27 @@ from bids import BIDSLayout
 
 def main(subs, skips):
     BIDS_ROOT = '../data/bids'
-    
-    # Get stft
     layout = BIDSLayout(BIDS_ROOT, derivatives = True)
     fpaths = layout.get(scope = 'preprocessing',
                     res = 'hi',
                     suffix='epo',
                     extension = 'fif.gz',
                     return_type = 'filename')
-    (Zxxs, events) = compute_stft.main(fpath, sub, task, run)
     
-    # Decode
-    subprocess.check_call("sbatch ./decoder_2.py %s %s" % (Zxxs, events), shell=True)
-    
+    for (fpath, sub, task, run) in iter_BIDSPaths(fpaths):
+        # if subs were given but sub is not in subs, don't preprocess
+        if bool(subs) and sub not in subs:
+            continue
+        # if sub in skips, don't preprocess
+        if sub in skips:
+            continue
+
+        # Get stft
+        (Zxxs, events) = compute_stft.main(fpath, sub, task, run)
+        
+        # Decode
+        subprocess.check_call("sbatch ./decoder_2.py %s %s" % (Zxxs, events), shell=True)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run decoder_2.py over given subjects')
     parser.add_argument('--subs', 
