@@ -22,8 +22,16 @@ def main(subs, skips) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run preprocess.py over given subjects')
-    parser.add_argument('--subs', type = str, nargs = '*', help = 'subjects to preprocess (e.g. 3 14 8), provide no argument to run over all subjects', default = [])
-    parser.add_argument('--skips', type = str, nargs = '*', help = 'subjects NOT to preprocess (e.g. 1 9)', default = [])
+    parser.add_argument('--subs', 
+                        type = str, 
+                        nargs = '*', 
+                        help = 'subjects to preprocess (e.g. 3 14 8), provide no argument to run over all subjects', 
+                        default = [])
+    parser.add_argument('--skips', 
+                        type = str, 
+                        nargs = '*', 
+                        help = 'subjects NOT to preprocess (e.g. 1 9)', 
+                        default = [])
     args = parser.parse_args()
     subs = args.subs
     skips = args.skips
