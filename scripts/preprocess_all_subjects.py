@@ -7,8 +7,11 @@ from util.io.iter_BIDSPaths import *
 
 def main(subs, skips) -> None:
     BIDS_ROOT = '../data/bids'
+    layout = BIDSLayout(BIDS_ROOT, derivatives = False)
+    fpaths = layout.get(extension = 'eeg',
+                        return_type = 'filename')
 
-    for (fpath, sub, task, run) in iter_BIDSPaths(BIDS_ROOT, False):
+    for (fpath, sub, task, run) in iter_BIDSPaths(fpaths):
         # if subs were given but sub is not in subs, don't preprocess
         if bool(subs) and sub not in subs:
             continue
