@@ -40,12 +40,9 @@ def main(subs, skips):
         # if sub in skips, don't preprocess
         if sub in skips:
             continue
-
-        # Get stft
-        (Zxxs, events) = compute_stft.main(fpath, sub, task, run)
         
-        # Decode
-        subprocess.check_call("sbatch ./decoder_2.py %s %s %s %s %s" % (sub, task, run, Zxxs, events), shell=True)
+        # Compute stft and decode
+        subprocess.check_call("sbatch ./compute_stft_and_decode.py %s %s %s %s %s" % (sub, task, run, Zxxs, events), shell=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run decoder_2.py over given subjects')

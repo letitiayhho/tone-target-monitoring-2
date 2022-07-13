@@ -22,7 +22,7 @@ from mne.decoding import SlidingEstimator, cross_val_multiscore
 
 from util.io.bids import DataSink
 
-def main(sub, task, run, Zxxs, events):
+def decoder_2(sub, task, run, Zxxs, events):
 
     # Create target array
     labels = pd.Series(events[:, 2])
@@ -82,13 +82,13 @@ def main(sub, task, run, Zxxs, events):
     print('Saving figure to: ' + fig_fpath)
     plt.savefig(fig_fpath)
 
-if __name__ == "__main__":
-    if len(sys.argv) != 6:
-        print(__doc__)
-        sys.exit(1)
-    sub = sys.argv[1]
-    task = sys.argv[2]
-    run = sys.argv[3]
-    Zxxs = sys.argv[4]
-    events = sys.argv[5]
-    main(Zxxs, events)
+# if __name__ == "__main__":
+#     if len(sys.argv) != 6:
+#         print(__doc__)
+#         sys.exit(1)
+#     sub = sys.argv[1]
+#     task = sys.argv[2]
+#     run = sys.argv[3]
+#     Zxxs = sys.argv[4]
+#     events = sys.argv[5]
+#     main(Zxxs, events)
