@@ -9,6 +9,7 @@
 #SBATCH --mail-user=letitiayhho@uchicago.edu
 #SBATCH --output=logs/compute_stft_%j.log
 
+import sys
 import mne
 import numpy as np
 import matplotlib.pyplot as plt
