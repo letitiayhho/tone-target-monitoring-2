@@ -2,6 +2,7 @@
 
 import subprocess
 import sys
+from bids import BIDSLayout
 from util.io.iter_BIDSPaths import *
 
 def main() -> None:
@@ -15,7 +16,7 @@ def main() -> None:
                     return_type = 'filename')
 
     for (fpath, sub, task, run) in iter_BIDSPaths(fpaths):
-        subprocess.check_call("sbatch ./decoder.py %s %s %s %s" % (fpath, sub, task, run), shell=True)
+        subprocess.check_call("sbatch ./compute_stft.py %s %s %s %s" % (fpath, sub, task, run), shell=True)
 
 if __name__ == "__main__":
     if len(sys.argv) != 1:

@@ -24,8 +24,7 @@ from util.io.compute_stft import *
 def main(fpath, sub, task, run):
     DERIV_ROOT = '../data/bids/derivatives'
     FS = 5000
-    C
-    _FREQS = [50, 100, 150, 200, 250]
+    CONDITION_FREQS = [50, 100, 150, 200, 250]
     
     # Get metadata
     n_freqs = len(CONDITION_FREQS)
@@ -47,7 +46,7 @@ def main(fpath, sub, task, run):
     # Reshape for decoder
     Zxxs = Zxxs.reshape((n_epochs, n_freqs*n_chans, 19)) # n_epochs, n_freqs*n_chans, n_windows
 
-    # Save powers
+    # Save powers and events
     sink = DataSink(DERIV_ROOT, 'decoding')
     stft_fpath = sink.get_path(
         subject = SUB,
@@ -59,6 +58,8 @@ def main(fpath, sub, task, run):
     )
     print('Saving scores to: ' + stft_fpath)
     np.save(stft_fpath, Zxxs)
+        
+    return (Zxxs, events)
     
 if __name__ == "__main__":
     if len(sys.argv) != 5:
