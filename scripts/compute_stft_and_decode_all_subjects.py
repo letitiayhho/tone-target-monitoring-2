@@ -2,7 +2,7 @@
 
 import subprocess
 import argparse
-import compute_stft
+import compute_stft_and_decode
 from bids import BIDSLayout
 from util.io.iter_BIDSPaths import *
 
@@ -42,7 +42,7 @@ def main(subs, skips):
             continue
         
         # Compute stft and decode
-        subprocess.check_call("sbatch ./compute_stft_and_decode.py %s %s %s %s %s" % (sub, task, run, Zxxs, events), shell=True)
+        subprocess.check_call("sbatch ./compute_stft_and_decode.py %s %s %s %s" % (fpath, sub, task, run), shell=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run decoder_2.py over given subjects')

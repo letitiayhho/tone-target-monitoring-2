@@ -1,18 +1,7 @@
-#!/usr/bin/env python3
-
-#SBATCH --time=00:15:00 # only need 15 minutes for regular logreg, need like 4 hrs for logregcv
-#SBATCH --partition=broadwl
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=4
-#SBATCH --mem-per-cpu=8000
-#SBATCH --mail-type=all
-#SBATCH --mail-user=letitiayhho@uchicago.edu
-#SBATCH --output=logs/decoding_%j.log
-
 import mne
 import sys
 import numpy as np
-
+import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.pipeline import make_pipeline
 from sklearn import preprocessing
@@ -23,6 +12,9 @@ from mne.decoding import SlidingEstimator, cross_val_multiscore
 from util.io.bids import DataSink
 
 def decoder_2(sub, task, run, Zxxs, events):
+    BIDS_ROOT = '../data/bids'
+    DERIV_ROOT = '../data/bids/derivatives'
+    FIGS_ROOT = '../figs'
 
     # Create target array
     labels = pd.Series(events[:, 2])
@@ -81,14 +73,3 @@ def decoder_2(sub, task, run, Zxxs, events):
     fig_fpath = FIGS_ROOT + '/subj-' + sub + '_' + 'task-pitch_' + 'run-' + run + '_stft' + '.png'
     print('Saving figure to: ' + fig_fpath)
     plt.savefig(fig_fpath)
-
-# if __name__ == "__main__":
-#     if len(sys.argv) != 6:
-#         print(__doc__)
-#         sys.exit(1)
-#     sub = sys.argv[1]
-#     task = sys.argv[2]
-#     run = sys.argv[3]
-#     Zxxs = sys.argv[4]
-#     events = sys.argv[5]
-#     main(Zxxs, events)
