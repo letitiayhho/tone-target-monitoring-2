@@ -42,6 +42,7 @@ def compute_stft(fpath, sub, task, run):
     
     # Read data
     epochs = mne.read_epochs(fpath)
+    print("events read")
     events = epochs.events
     epochs = epochs.get_data()
     
