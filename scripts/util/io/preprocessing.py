@@ -129,10 +129,13 @@ def get_save_path(deriv_root, sub, task, run):
                     subject = sub,
                     task = task,
                     run = run,
-                    desc = 'clean_5khz',
+                    desc = 'clean',
                     suffix = 'epo', # this suffix is following MNE, not BIDS, naming conventions
                     extension = 'fif.gz',
                     )
+    fpath_split = fpath.split('_')
+    fpath_split.insert(3, 'res-hi')
+    fpath = '_'.join(fpath_split)
     return fpath, sink
 
 def save_and_generate_report(fpath, epochs, sink, sub, task, run, ica, bads, thres):
@@ -169,4 +172,4 @@ def save_and_generate_report(fpath, epochs, sink, sub, task, run, ica, bads, thr
     report.add_html('<br/>threshold: {:0.2f} microvolts</br>'.format(thres['eeg'] * 1e6),
                                 title = 'Trial Rejection Criteria')
     report.add_html(epochs.info._repr_html_(), title = 'Info')
-    report.save(op.join(sink.deriv_root, 'sub-%s_task-%s_run-%s.html'%(sub, task, run)), open_browser = False, overwrite = True)
+    report.save(op.join(sink.deriv_root, 'sub-%s_task-%s_run-%s_res-hi.html'%(sub, task, run)), open_browser = False, overwrite = True)

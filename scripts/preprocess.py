@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=02:30:00
+#SBATCH --time=02:00:00
 #SBATCH --partition=bigmem2
 #SBATCH --ntasks=1
 #SBATCH --mem-per-cpu=128G
