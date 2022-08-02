@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 
+#SBATCH --time=00:02:00
+#SBATCH --partition=broadwl
+#SBATCH --ntasks=1
+#SBATCH --mem-per-cpu=8G
+#SBATCH --mail-type=all
+#SBATCH --mail-user=letitiayhho@uchicago.edu
+#SBATCH --output=logs/convert-to-bids_%j.log
+
 from mne_bids import BIDSPath, write_raw_bids, get_anonymization_daysback
 import pandas as pd
 import numpy as np
@@ -8,17 +16,15 @@ import mne
 import os
 import re
 from util.io.get_chan_mapping import get_chan_mapping
-from util.io.iter_raw_paths import iter_raw_paths
 
-# Constants
+def main(fname, sub, task, run) -> None:
+    print(fname, sub, task, run)
+    print("Convert kicked off, quitting for now")
+    quit()
 
-DATA_DIR = '../data/raw/' # where our data currently lives
-BIDS_DIR = '../data/bids/' # where we want it to live
-MAPS_DIR = '../data/captrak/' # where the mapping and electrode location files live
-
-# Run conversion on all files
-
-for (fname, sub, task, run) in iter_raw_paths(DATA_DIR):
+    RAW_DIR = '../data/raw/' # where our data currently lives
+    BIDS_DIR = '../data/bids/' # where we want it to live
+    MAPS_DIR = '../data/captrak/' # where the mapping and electrode location files live
 
     # create output file name
     bids_path = BIDSPath(
@@ -31,9 +37,9 @@ for (fname, sub, task, run) in iter_raw_paths(DATA_DIR):
     if os.path.isfile(bids_path):
         print(f'File {bids_path} exists, skipping {fname}')
         continue
-    
+
     # load data with MNE function for your file format
-    fpath = os.path.join(DATA_DIR, fname)
+    fpath = os.path.join(RAW_DIR, fname)
     print(fpath)
     raw = mne.io.read_raw_brainvision(fpath)
     raw.load_data()
@@ -76,7 +82,15 @@ for (fname, sub, task, run) in iter_raw_paths(DATA_DIR):
         overwrite = True,
     )
 
-# Check output files
+__doc__ = "Usage: ./convert-to-bids.py <fname> <sub> <task> <run>"
 
-from mne_bids import print_dir_tree
-print_dir_tree(BIDS_DIR)
+if __name__ == "__main__":
+    if len(sys.argv) != 5:
+        print(__doc__)
+        sys.exit(1)
+    fname = sys.argv[1]
+    sub = sys.argv[2]
+    task = sys.argv[3]
+    run = sys.argv[4]
+    main(fname, sub, task, run)
+
