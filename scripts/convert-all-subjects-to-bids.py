@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import subprocess
 from util.io.iter_raw_paths import iter_raw_paths
 
 def main(subs, skips) -> None:
@@ -13,6 +14,7 @@ def main(subs, skips) -> None:
         # if sub in skips, don't convert
         if sub in skips:
             continue
+        #print("subprocess.check_call(\"sbatch ./convert-to-bids.py %s %s %s %s\" % (fname, sub, task, run), shell=True)")
         subprocess.check_call("sbatch ./convert-to-bids.py %s %s %s %s" % (fname, sub, task, run), shell=True)
 
 if __name__ == "__main__":

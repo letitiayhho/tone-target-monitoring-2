@@ -3,7 +3,7 @@
 #SBATCH --time=00:02:00
 #SBATCH --partition=broadwl
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=8G
+#SBATCH --mem-per-cpu=48G
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
 #SBATCH --output=logs/convert-to-bids_%j.log
@@ -14,13 +14,12 @@ import numpy as np
 import itertools
 import mne
 import os
+import sys
 import re
 from util.io.get_chan_mapping import get_chan_mapping
 
 def main(fname, sub, task, run) -> None:
     print(fname, sub, task, run)
-    print("Convert kicked off, quitting for now")
-    quit()
 
     RAW_DIR = '../data/raw/' # where our data currently lives
     BIDS_DIR = '../data/bids/' # where we want it to live
@@ -35,8 +34,7 @@ def main(fname, sub, task, run) -> None:
         root = BIDS_DIR
     )
     if os.path.isfile(bids_path):
-        print(f'File {bids_path} exists, skipping {fname}')
-        continue
+        sys.exit(f'File {bids_path} exists, skipping {fname}')
 
     # load data with MNE function for your file format
     fpath = os.path.join(RAW_DIR, fname)
