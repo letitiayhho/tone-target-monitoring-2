@@ -4,3 +4,5 @@ __pycache__
 *data/
 .ipynb_checkpoints
 !*.gitignore
+notes/*
+*.tar.xz
