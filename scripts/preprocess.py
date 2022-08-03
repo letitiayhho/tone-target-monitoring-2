@@ -6,7 +6,7 @@
 #SBATCH --mem-per-cpu=128G
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
-#SBATCH --output=logs/%j.log
+#SBATCH --output=logs/preprocess_%j.log
 
 import sys
 import gc
