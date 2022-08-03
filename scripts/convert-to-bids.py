@@ -46,6 +46,14 @@ def main(fname, sub, task, run) -> None:
     # add some info BIDS will want
     raw.info['line_freq'] = 60 # the power line frequency in the building we collected in
 
+    # drop extra 32 channels for subs 23, 24, 25
+    if sub in ['23', '24', '25']:
+        matches = [x for x in raw.ch_names if re.search('Ch', x)]
+        raw = raw.drop_channels(matches)
+    n_chans = len(raw.ch_names)
+    if n_chans != 64:
+        sys.exit("Incorrect number of channels, there should be 64 channels, instead there are {chans} channels")
+
     # map channel numbers to channel names
     mapping = get_chan_mapping(MAPS_DIR, sub)
     raw.rename_channels(mapping)
@@ -65,7 +73,6 @@ def main(fname, sub, task, run) -> None:
     event_names = {1: '50', 2: '100', 3: '150', 4: '200', 5: '250'}
     annot = mne.annotations_from_events(events, sfreq = raw.info['sfreq'], event_desc = event_names)
     raw.set_annotations(annot)
-
 
     # get range of dates the BIDS specification will accept
     daysback_min, daysback_max = get_anonymization_daysback(raw)
