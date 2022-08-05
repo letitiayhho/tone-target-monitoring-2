@@ -17,7 +17,7 @@ def main(sub, task, run) -> None:
     BIDS_ROOT = '../data/bids'
     DERIV_ROOT = '../data/bids/derivatives'
     LOWPASS = 300
-    #FS = 2000
+    FS = 5000
 
     # Import data
     print("---------- Import data ----------")
@@ -35,6 +35,8 @@ def main(sub, task, run) -> None:
     # Resampling and PREP
     print("---------- Resampling and PREP ----------")
     #raw, events = resample(raw, FS, events)
+    # if sub == '2':
+        # raw = resample(FS)
     raw, bads = run_PREP(raw, sub, run, LOWPASS)
 
     # Run ICA on one copy of the data
