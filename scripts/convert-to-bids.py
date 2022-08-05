@@ -33,8 +33,8 @@ def main(fname, sub, task, run) -> None:
         datatype = 'eeg',
         root = BIDS_DIR
     )
-    if os.path.isfile(bids_path):
-        sys.exit(f'File {bids_path} exists, skipping {fname}')
+#     if os.path.isfile(bids_path):
+#         sys.exit(f'File {bids_path} exists, skipping {fname}')
 
     # load data with MNE function for your file format
     fpath = os.path.join(RAW_DIR, fname)
@@ -46,18 +46,20 @@ def main(fname, sub, task, run) -> None:
     # add some info BIDS will want
     raw.info['line_freq'] = 60 # the power line frequency in the building we collected in
 
-    # drop extra 32 channels for subs 23, 24, 25
-    if sub in ['23', '24', '25']:
-        matches = [x for x in raw.ch_names if re.search('Ch', x)]
-        raw = raw.drop_channels(matches)
-    n_chans = len(raw.ch_names)
-    if n_chans != 64:
-        sys.exit("Incorrect number of channels, there should be 64 channels, instead there are {chans} channels")
-
     # map channel numbers to channel names
     mapping = get_chan_mapping(MAPS_DIR, sub)
     raw.rename_channels(mapping)
     raw.add_reference_channels(ref_channels = ['Cz'])
+
+    # drop extra 32 channels for subs 23, 24, 25
+    if sub in ['23', '24', '25']:
+        print(f"Dropping extra channels for sub {sub}!")
+        matches = [x for x in raw.ch_names if re.search('Ch', x)]
+        raw = raw.drop_channels(matches)
+    print(raw.ch_names)
+    n_chans = len(raw.ch_names)
+    if n_chans != 65:
+        sys.exit(f"Incorrect number of channels, there should be 65 (stim incl) channels, instead there are {n_chans} channels")
 
     # map channels to their coordinates
     dig = mne.channels.read_dig_captrak(MAPS_DIR + 'subj-' + sub + '.bvct')
