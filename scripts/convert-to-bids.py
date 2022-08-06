@@ -18,8 +18,8 @@ import sys
 import re
 from util.io.get_chan_mapping import get_chan_mapping
 
-def main(fname, sub, task, run) -> None:
-    print(fname, sub, task, run)
+def main(fpath, sub, task, run) -> None:
+    print(fpath, sub, task, run)
 
     RAW_DIR = '../data/raw/' # where our data currently lives
     BIDS_DIR = '../data/bids/' # where we want it to live
@@ -37,7 +37,7 @@ def main(fname, sub, task, run) -> None:
 #         sys.exit(f'File {bids_path} exists, skipping {fname}')
 
     # load data with MNE function for your file format
-    fpath = os.path.join(RAW_DIR, fname)
+    fpath = os.path.join(RAW_DIR, fpath)
     print(fpath)
     raw = mne.io.read_raw_brainvision(fpath)
     raw.load_data()
@@ -89,15 +89,15 @@ def main(fname, sub, task, run) -> None:
         overwrite = True,
     )
 
-__doc__ = "Usage: ./convert-to-bids.py <fname> <sub> <task> <run>"
+__doc__ = "Usage: ./convert-to-bids.py <fpath> <sub> <task> <run>"
 
 if __name__ == "__main__":
     if len(sys.argv) != 5:
         print(__doc__)
         sys.exit(1)
-    fname = sys.argv[1]
+    fpath = sys.argv[1]
     sub = sys.argv[2]
     task = sys.argv[3]
     run = sys.argv[4]
-    main(fname, sub, task, run)
+    main(fpath, sub, task, run)
 

@@ -7,15 +7,15 @@ from util.io.iter_raw_paths import iter_raw_paths
 def main(subs, skips) -> None:
     RAW_DIR = '../data/raw/' # where our data currently lives
 
-    for (fname, sub, task, run) in iter_raw_paths(RAW_DIR):
+    for (fpath, sub, task, run) in iter_raw_paths(RAW_DIR):
         # if subs were given but sub is not in subs, don't convert
         if bool(subs) and sub not in subs:
             continue
         # if sub in skips, don't convert
         if sub in skips:
             continue
-        #print("subprocess.check_call(\"sbatch ./convert-to-bids.py %s %s %s %s\" % (fname, sub, task, run), shell=True)")
-        subprocess.check_call("sbatch ./convert-to-bids.py %s %s %s %s" % (fname, sub, task, run), shell=True)
+        #print("subprocess.check_call(\"sbatch ./convert-to-bids.py %s %s %s %s\" % (fpath, sub, task, run), shell=True)")
+        subprocess.check_call("sbatch ./convert-to-bids.py %s %s %s %s" % (fpath, sub, task, run), shell=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run convert-to-bids.py over given subjects')
