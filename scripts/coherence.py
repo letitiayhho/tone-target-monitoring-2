@@ -14,7 +14,7 @@ from bids import BIDSLayout
 from util.io.coherence import *
 from util.io.iter_BIDSPaths import *
 
-def main(FPATH, SUB, TASK, RUN):
+def main(FPATH, SUB, TASK, RUN, METHOD):
     BIDS_ROOT = '../data/bids'
     FIGS_ROOT = '../figs'
     DERIV_ROOT = '../data/bids/derivatives'
@@ -52,25 +52,26 @@ def main(FPATH, SUB, TASK, RUN):
     fmin, fmax = get_fmin_and_fmax(CONDS)
     coh_df = pd.DataFrame()
     for cond in CONDS:
-        coh = get_coh(cond, combined_epochs, indices, fmin, fmax, CONDS, FS)
+        coh = get_coh(cond, combined_epochs, indices, fmin, fmax, CONDS, FS, METHOD)
         coh = clean_coh(coh, N_CHANS)
         cond_coh_df = create_coh_df(coh, cond, CONDS, N_CHANS, SUB)
         coh_df = pd.concat([coh_df, cond_coh_df])
     coh_df = coh_df.reset_index()
 
     # Write to pickle
-    pickle_fp = f"{DERIV_ROOT}/coherence/subj-{SUB}_task-{TASK}_run-{RUN}_coh-by-condition.pkl"
+    pickle_fp = f"{DERIV_ROOT}/coherence/subj-{SUB}_task-{TASK}_run-{RUN}_{METHOD}-by-condition.pkl"
     print(f"Writing coherence output to {pickle_fp}")
     coh_df.to_pickle(pickle_fp)
     
-__doc__ = "Usage: ./coherence.py <fname> <sub> <task> <run>"
+__doc__ = "Usage: ./coherence.py <fname> <sub> <task> <run> <method>, method is 'coh' or 'imcoh' etc."
     
 if __name__ == "__main__":
-    if len(sys.argv) != 5:
+    if len(sys.argv) != 6:
         print(__doc__)
         sys.exit(1)
-    FNAME = sys.argv[1]
+    FPATH = sys.argv[1]
     SUB = sys.argv[2]
     TASK = sys.argv[3]
     RUN = sys.argv[4]
-    main(FNAME, SUB, TASK, RUN)
+    METHOD = sys.argv[5]
+    main(FPATH, SUB, TASK, RUN, METHOD)

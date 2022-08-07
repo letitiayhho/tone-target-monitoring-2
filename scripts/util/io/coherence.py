@@ -112,10 +112,18 @@ def get_fmin_and_fmax(CONDS):
     fmax = freqs + 5
     return(fmin, fmax)
 
-def get_coh(cond, epochs, indices, fmin, fmax, CONDS, FS):
+def get_coh(cond, epochs, indices, fmin, fmax, CONDS, FS, METHOD):
+    print(f"METHOD: {METHOD}")
     coh = spectral_connectivity_epochs(
-        epochs[cond], method='cohy', mode='fourier', indices=indices,
-        sfreq=FS, fmin=fmin, fmax=fmax, faverage=True, n_jobs=1, verbose = 'WARNING')
+        epochs[cond], 
+        method = METHOD, 
+        mode = 'fourier', 
+        indices = indices,
+        sfreq = FS, 
+        fmin = fmin, 
+        fmax = fmax, 
+        faverage = True, 
+        n_jobs = 1)
     return(coh)
 
 def clean_coh(coh, N_CHANS):
