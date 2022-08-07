@@ -53,7 +53,7 @@ def main(FPATH, SUB, TASK, RUN, METHOD):
     coh_df = pd.DataFrame()
     for cond in CONDS:
         coh = get_coh(cond, combined_epochs, indices, fmin, fmax, CONDS, FS, METHOD)
-        coh = clean_coh(coh, N_CHANS)
+        coh = clean_coh(coh, CONDS, N_CHANS)
         cond_coh_df = create_coh_df(coh, cond, CONDS, N_CHANS, SUB)
         coh_df = pd.concat([coh_df, cond_coh_df])
     coh_df = coh_df.reset_index()

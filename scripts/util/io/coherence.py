@@ -126,13 +126,14 @@ def get_coh(cond, epochs, indices, fmin, fmax, CONDS, FS, METHOD):
         n_jobs = 1)
     return(coh)
 
-def clean_coh(coh, N_CHANS):
-    df = np.zeros((N_CHANS, 5))
+def clean_coh(coh, CONDS, N_CHANS):
+    N_CONDS = len(CONDS)
+    df = np.zeros((N_CHANS, N_CONDS))
     coh_vals = coh.get_data()
-    for i in range(310):
+    for i in range(N_CHANS * N_CONDS):
         a = i
         b = a%5
-        chan = int(i/5)
+        chan = int(i/N_CONDS)
         val = coh_vals[a, b]
         df[chan, b] = val
     return(df)
