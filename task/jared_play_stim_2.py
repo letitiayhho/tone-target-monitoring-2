@@ -45,13 +45,13 @@ print("Current seed: " + str(seed))
 np.random.seed(seed)
 
 # count trial progress in log file
-#log = "data/logs/subj_" + exp_info['sub_num'] + "_block_" + exp_info['block_num'] + ".log"
-#if not os.path.isfile(log): # create log file if it doesn't exist
-   # with open(log, 'w', newline='') as f:
-   #     writer = csv.writer(f)
-   #     writer.writerow(['trial', 'freq', 'marker'])
-# trial_count = sum(1 for line in open(log))
-# print("Current trial number: " + str(trial_count))
+log = "data/logs/subj_" + exp_info['sub_num'] + "_block_" + exp_info['block_num'] + ".log"
+if not os.path.isfile(log): # create log file if it doesn't exist
+   with open(log, 'w', newline='') as f:
+       writer = csv.writer(f)
+       writer.writerow(['seed', 'block', 'sequence', 'tone', 'freq', 'target', 'is_target'])
+trial_count = sum(1 for line in open(log))
+print("Current trial number: " + str(trial_count))
 
 #create window and make fixation 
 mywin = visual.Window([800,600], monitor="testMonitor", units="deg")
