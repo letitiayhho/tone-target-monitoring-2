@@ -44,7 +44,7 @@ while score < SCORE_NEEDED:
     
     # Get response
     response = get_response(WIN)
-    print(f'response: {response_text}')
+    print(f'response: {response}')
     correct, score = update_score(WIN, n_targets, response, score, SCORE_NEEDED)
     print(f'score: {score}')
     seq_num += 1

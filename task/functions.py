@@ -1,8 +1,6 @@
 import pandas as pd
 import os.path
 import random
-import csv
-import string
 
 from psychopy import prefs
 prefs.hardware['audioLib'] = ['ptb']
@@ -13,20 +11,27 @@ from psychtoolbox import GetSecs, WaitSecs
 
 def open_log(SUB_NUM, BLOCK_NUM):
     log = "data/logs/subj_" + SUB_NUM + "_block_" + BLOCK_NUM + ".log"
+    
     if not os.path.isfile(log): # create log file if it doesn't exist
-        with open(log, 'w', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow(['seed', 
-                             'sub_num', 
-                             'block_num', 
-                             'seq_num', 
-                             'tone_num',
-                             'freq', 
-                             'mark', 
-                             'is_target',
-                             'n_targets', 
-                             'target', 
-                             'score'])
+        print(f"Creating {log}")
+        d = {
+            'seed': [],
+            'sub_num': [],
+            'block_num': [],
+            'seq_num': [],
+            'target': [],
+            'tone_num' : [],
+            'freq': [],
+            'mark': [],
+            'is_target': [],
+            'n_targets': [],
+            'response': [],
+            'correct': [],
+            'score': [],
+            }
+        print(d)
+        df = pd.DataFrame(data = d)
+        df.to_csv(log, mode='w', index = False)
     return(log)
 
 def get_score(LOG):
