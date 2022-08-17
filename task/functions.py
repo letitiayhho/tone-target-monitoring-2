@@ -9,7 +9,7 @@ prefs.hardware['audioLib'] = ['ptb']
 from psychopy.sound.backend_ptb import SoundPTB as Sound
 from events import EventMarker
 from psychopy import visual, core, event
-
+from psychtoolbox import GetSecs, WaitSecs
 
 def open_log(SUB_NUM, BLOCK_NUM):
     log = "data/logs/subj_" + SUB_NUM + "_block_" + BLOCK_NUM + ".log"
@@ -29,15 +29,6 @@ def open_log(SUB_NUM, BLOCK_NUM):
                              'score'])
     return(log)
 
-def get_seq_num(LOG):
-    log = pd.read_csv(LOG)
-    seq_nums = log['seq_num']
-    if len(seq_nums) == 0:
-        seq_num = 0
-    else:
-        seq_num = seq_nums.iloc[-1]
-    return(seq_num)
-
 def get_score(LOG):
     log = pd.read_csv(LOG)
     scores = log['score']
@@ -45,7 +36,18 @@ def get_score(LOG):
         score = 0
     else:
         score = scores.iloc[-1]
+    score = int(score)
     return(score)
+
+def get_seq_num(LOG):
+    log = pd.read_csv(LOG)
+    seq_nums = log['seq_num']
+    if len(seq_nums) == 0:
+        seq_num = 0
+    else:
+        seq_num = seq_nums.iloc[-1]
+    seq_num = int(seq_num)
+    return(seq_num)
 
 def get_target(FREQS):
     target = random.choice(FREQS)
@@ -61,30 +63,24 @@ def fixation(WIN):
     WIN.flip()
     return(fixation)
 
-def play_target(KB, WIN, TONE_LEN, target):
+def play_target(WIN, TONE_LEN, target):
     t_snd = Sound(target, secs = TONE_LEN)
     
-    # creds to jared
     target_text = visual.TextStim(WIN, 
-                                  text = "Press 'space' to hear the target tone. \
-                                  \
-                                  Press 'enter' to continue",
+                                  text = "Press 'space' to hear the target tone. Press 'enter' to continue",
                                   pos=(0.0, 0.0),
                                   color=(1, 1, 1), 
                                   colorSpace='rgb')
     target_text.draw()
     WIN.flip()
-#     event.waitKeys()
     while True:
-        keys = event.getKeys()
-        if keys:
-            print(keys)
+        keys = event.getKeys(keyList = ['space', 'return'])
         if 'space' in keys:
             t_snd.play()
         elif 'return' in keys: 
             break
 
-def ready(KB, WIN):
+def ready(WIN):
     block_begin = visual.TextStim(WIN, 
                                   text = "Please count how many times you hear the target tone. Press 'enter' to begin!",
                                   pos=(0.0, 0.0),
@@ -92,12 +88,8 @@ def ready(KB, WIN):
                                   colorSpace='rgb')
     block_begin.draw()
     WIN.flip()
-    event.waitKeys()
-#     while True:
-#         keys = event.getKeys()
-#         if 'return' in keys: 
-#             WIN.flip()
-#             break
+    event.waitKeys(keyList = ['space', 'return'])
+    WIN.flip()
 
 def play_sequence(FREQS, TONE_LEN, target, n_tones):
     tone_nums = []
@@ -106,8 +98,8 @@ def play_sequence(FREQS, TONE_LEN, target, n_tones):
     is_targets = []
     n_targets = 0
 
-    for tone_num in range(0, n_tones + 1):
-        print(tone_num)
+    for tone_num in range(1, n_tones + 1):
+        print(tone_num, end = ', ', flush = True)
 
         # select next tone
         index = random.randint(0, len(FREQS)-1)
@@ -136,7 +128,8 @@ def play_sequence(FREQS, TONE_LEN, target, n_tones):
         freqs.append(freq)
         marks.append(mark)
         is_targets.append(is_target)
-        
+    
+    print('')
     return(tone_nums, freqs, marks, is_targets, n_targets)
 
 def broadcast(n_tones, var):
@@ -144,8 +137,9 @@ def broadcast(n_tones, var):
         broadcasted_array = [var]*n_tones
     return(broadcasted_array)
 
-def write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, tone_num, 
-              freq, mark, is_target, n_targets, response, correct, score):
+def write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, tone_nums, 
+              freqs, marks, is_targets, n_targets, response, correct, score):
+    print("Writing to log file")
     d = {
         'seed': broadcast(n_tones, SEED),
         'sub_num': broadcast(n_tones, SUB_NUM),
@@ -162,11 +156,10 @@ def write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, tone_num,
         'score': broadcast(n_tones, score),
         }
     df = pd.DataFrame(data = d)
-    df.to_csv(LOG, mode='a', header=False)
+    df.to_csv(LOG, mode='a', header = False, index = False)
             
-def get_response(KB, WIN):
+def get_response(WIN):
     # Prompt response
-    WaitSecs(1)
     ask_response = visual.TextStim(WIN, 
                       text = "How many times did you hear the target tone?",
                       pos=(0.0, 0.0),
@@ -176,12 +169,12 @@ def get_response(KB, WIN):
     WIN.flip()
 
     # Fetch response
-    keyList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'return', 'backspace']
+    keylist = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'return', 'backspace']
     response = []
     response_text = ''
 
     while True:
-        keys = event.getKeys(keyList = keyList)
+        keys = event.getKeys(keyList = keylist)
         if response_text and 'return' in keys: # empty response not accepted
             break
         elif keys:
@@ -192,42 +185,33 @@ def get_response(KB, WIN):
             else:
                 response.append(keys)
             response_text = ''.join([item for sublist in response for item in sublist])
-            win.flip()
-            print(f'Response: {response_text}')
-            show_response = visual.TextStim(win,
+            WIN.flip()
+            show_response = visual.TextStim(WIN,
                                            text = response_text,
                                            pos=(0.0, 0.0),
                                            color=(1, 1, 1), 
                                            colorSpace='rgb')
             show_response.draw()
-            win.flip()
+            WIN.flip()
             
     response = int(response_text)
     return(response)
 
-def update_score(WIN, N_TARGETS, RESPONSE, score, SCORE_NEEDED):
-    if abs(N_TARGETS - RESPONSE) == 0:
+def update_score(WIN, n_targets, response, score, SCORE_NEEDED):
+    if abs(n_targets - response) == 0:
         correct = 2
         score += 1
         update = visual.TextStim(WIN, 
-                  text = f"You are correct! There were {N_TARGETS} targets. \
-                  \
-                  Your score is now {score}/{SCORE_NEEDED}. \
-                  \
-                  Press 'enter' to continue.",
+                  text = f"You are correct! There were {n_targets} targets. Your score is now {score}/{SCORE_NEEDED}. Press 'enter' to continue.",
                   pos=(0.0, 0.0), 
                   color=(1, 1, 1), 
                   colorSpace='rgb'
                  )
-    elif abs(N_TARGETS - RESPONSE) < 2:
+    elif abs(n_targets - response) < 2:
         correct = 1
         score += 1
         update = visual.TextStim(WIN, 
-                  text = f"Close enough! There were {N_TARGETS} targets. \
-                  \
-                  Your score is now {score}/{SCORE_NEEDED}. \
-                  \
-                  Press 'enter' to continue.",
+                  text = f"Close enough! There were {n_targets} targets. Your score is now {score}/{SCORE_NEEDED}. Press 'enter' to continue.",
                   pos=(0.0, 0.0), 
                   color=(1, 1, 1), 
                   colorSpace='rgb'
@@ -235,7 +219,7 @@ def update_score(WIN, N_TARGETS, RESPONSE, score, SCORE_NEEDED):
     else:
         correct = 0 
         update = visual.TextStim(WIN, 
-                  text = f"There were {N_TARGETS} targets. \
+                  text = f"There were {n_targets} targets. \
                   \
                   Your score remains {score}/{SCORE_NEEDED}. \
                   \
@@ -248,12 +232,7 @@ def update_score(WIN, N_TARGETS, RESPONSE, score, SCORE_NEEDED):
     update.draw()
     WIN.flip()
     
-    event.waitKeys()
-#     while True:
-#         keys = KB.getKeys()
-#         if 'return' in keys: 
-#             WIN.flip()
-#             break
+    event.waitKeys(keyList = ['return'])
 
     return(correct, score)
 
