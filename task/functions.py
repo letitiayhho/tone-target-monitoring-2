@@ -93,7 +93,7 @@ def ready(WIN):
                                   colorSpace='rgb')
     block_begin.draw()
     WIN.flip()
-    event.waitKeys(keyList = ['space', 'return'])
+    event.waitKeys(keyList = ['return'])
     WIN.flip()
 
 def play_sequence(FREQS, TONE_LEN, target, n_tones):
@@ -122,11 +122,12 @@ def play_sequence(FREQS, TONE_LEN, target, n_tones):
         # schedule sound
         now = GetSecs()
         snd.play(when = now + 0.1)
-        WaitSecs(TONE_LEN)
+        WaitSecs(0.1)
 #         marker.send(mark) CHANGE THIS
+        WaitSecs(TONE_LEN - 0.1)
         
         # add jitter between TRIALS
-        WaitSecs(TONE_LEN + random.uniform(-0.1, 0.09))
+        WaitSecs(TONE_LEN + random.uniform(-0.1, 0))
 
         # save tone info
         tone_nums.append(tone_num)

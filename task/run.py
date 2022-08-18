@@ -1,4 +1,3 @@
-from psychopy import prefs
 from psychopy import visual, core, event
 from functions import *
 
