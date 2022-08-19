@@ -68,6 +68,27 @@ def fixation(WIN):
     WIN.flip()
     return(fixation)
 
+def instructions(WIN):
+    instruction_text = visual.TextStim(WIN, 
+                                  text = "In this experiment, you will be presented with a ‘target’ tone, which we will ask you to remember. This target tone will be played amidst a sequence of other tones; your task is to count and remember how many times you hear the target tone in a sequence. Press ‘space’ for the remaining instructions…",
+                                  pos=(0.0, 0.0),
+                                  color=(1, 1, 1), 
+                                  colorSpace='rgb')
+    instruction2_text = visual.TextStim(WIN, 
+                                        text = "You will be asked how many times you heard the target tone at the end of a sequence and if you accurately report the number of target tones–or come close to the actual number of target tones–your ‘score’ will increase by 1. To finish the task, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press ‘space’ to continue…",
+                                        pos=(0.0, 0.0),
+                                        color=(1, 1, 1), 
+                                        colorSpace='rgb')
+    instruction_text.draw()
+    WIN.flip()
+    event.waitKeys(keyList = ['space'])
+
+    event.clearEvents(eventType = None)
+    instruction2_text.draw()
+    WIN.flip()       
+    event.waitKeys(keyList = ['space','enter']) 
+    WIN.flip()      
+
 def play_target(WIN, TONE_LEN, target):
     t_snd = Sound(target, secs = TONE_LEN)
     
