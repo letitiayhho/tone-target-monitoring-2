@@ -1,4 +1,5 @@
 from psychopy import visual, core, event
+from events import EventMarker
 from functions import *
 
 FREQS = [130, 200, 280]

@@ -5,7 +5,6 @@ import random
 from psychopy import prefs
 prefs.hardware['audioLib'] = ['ptb']
 from psychopy.sound.backend_ptb import SoundPTB as Sound
-from events import EventMarker
 from psychopy import visual, core, event
 from psychtoolbox import GetSecs, WaitSecs, hid
 from psychopy.hardware.keyboard import Keyboard
