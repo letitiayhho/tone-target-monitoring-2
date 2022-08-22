@@ -6,10 +6,12 @@ import random
 
 FREQS = [130, 200, 280]
 TONES = 1000
+TONE_LEN = 0.2
 
 marker = EventMarker()
 
 for i in range(TONES):
+    print(i)
 
     index = random.randint(0, len(FREQS)-1)
     freq = FREQS[index]
@@ -19,7 +21,7 @@ for i in range(TONES):
     now = GetSecs()
     snd.play(when = now + 0.1)
     WaitSecs(0.1)
-    marker.send(mark) CHANGE THIS
+    marker.send(mark)
     WaitSecs(TONE_LEN - 0.1)
 
     WaitSecs(0.1)
