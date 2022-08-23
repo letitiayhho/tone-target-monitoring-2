@@ -30,6 +30,14 @@ SEED = int(SUB_NUM + "0" + BLOCK_NUM + str(seq_num))
 print("Current seed: " + str(SEED))
 random.seed(SEED)
 
+#display instructions if training block
+if BLOCK_NUM == "0": 
+    SCORE_NEEDED = 3
+    instructions(WIN)
+else: 
+    SCORE_NEEDED =18
+
+
 # play sequences until SCORE_NEEDED is reached
 while score < SCORE_NEEDED:
     target = get_target(FREQS)
