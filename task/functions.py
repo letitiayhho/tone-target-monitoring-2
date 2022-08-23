@@ -22,7 +22,7 @@ def get_keyboard(dev_name):
     return Keyboard(idx)
 
 def open_log(SUB_NUM, BLOCK_NUM):
-    log = "data/logs/subj_" + SUB_NUM + "_block_" + BLOCK_NUM + ".log"
+    log = "data/logs/sub-" + SUB_NUM + "_blk-" + BLOCK_NUM + ".log"
 
     if not os.path.isfile(log): # create log file if it doesn't exist
         print(f"Creating {log}")
