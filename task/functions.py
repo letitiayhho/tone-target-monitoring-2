@@ -114,22 +114,22 @@ def play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones):
     marks = []
     is_targets = []
     n_targets = 0
+    force = False
+    one_back = 0
+    two_back = 0
 
     for tone_num in range(1, n_tones + 1):
         print(tone_num, end = ', ', flush = True)
 
         # select next tone
-        index = random.randint(0, len(FREQS)-1)
-        freq = FREQS[index]
-        mark = index + 1
+        if not force:
+            i = random.randint(0, len(FREQS)-1)
+        freq = FREQS[i]
+        mark = i + 1
         snd = Sound(freq, secs = TONE_LEN)
 
         # increment
-        if freq == target:
-            is_target = 1
-            n_targets += 1
-        else:
-            is_target = 0
+        is_target, n_targets = check_target(freq, target, n_targets)
 
         # schedule sound
         now = GetSecs()
@@ -138,7 +138,7 @@ def play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones):
         MARKER.send(mark)
         WaitSecs(TONE_LEN - 0.1)
 
-        # add jitter between TRIALS
+        # add jitter between tones
         WaitSecs(TONE_LEN + random.uniform(-0.1, 0))
 
         # save tone info
@@ -146,9 +146,34 @@ def play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones):
         freqs.append(freq)
         marks.append(mark)
         is_targets.append(is_target)
+        
+        # check for repeats
+        force, i, one_back, two_back = check_repeats(FREQS, freq, one_back, two_back)
 
     print('')
     return(tone_nums, freqs, marks, is_targets, n_targets)
+
+def check_target(freq, target, n_targets):
+    if freq == target:
+        is_target = 1
+        n_targets += 1
+    else:
+        is_target = 0
+    return(is_target, n_targets)
+
+def check_repeats(FREQS, freq, one_back, two_back):
+    if freq == one_back == two_back:
+        force = True
+        drop = FREQS.index(freq)
+        indexes = [0, 1, 2]
+        indexes.pop(drop)
+        i = random.choice(indexes)
+    else:
+        force = False
+        i = None
+    two_back = one_back
+    one_back = freq
+    return(force, i, one_back, two_back)
 
 def broadcast(n_tones, var):
     if not isinstance(var, list):
