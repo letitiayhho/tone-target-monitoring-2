@@ -81,25 +81,47 @@ def fixation(WIN):
     return(fixation)
 
 def instructions(WIN):
-    instruction_text = visual.TextStim(WIN, 
-                                  text = "In this experiment, you will be presented with a ‘target’ tone, which we will ask you to remember. This target tone will be played amidst a sequence of other tones; your task is to count and remember how many times you hear the target tone in a sequence. Press ‘space’ for the remaining instructions…",
-                                  pos=(0.0, 0.0),
-                                  color=(1, 1, 1), 
-                                  colorSpace='rgb')
-    instruction2_text = visual.TextStim(WIN, 
-                                        text = "You will be asked how many times you heard the target tone at the end of a sequence and if you accurately report the number of target tones–or come close to the actual number of target tones–your ‘score’ will increase by 1. To finish the task, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press ‘space’ to continue…",
+    instruction_text = visual.TextStim(WIN,
+                                      text = "In this experiment, you will be presented with a ‘target’ tone, which we will ask you to remember. This target tone will be played amidst a sequence of other tones; your task is to count and remember how many times you hear the target tone in a sequence. Press 'enter' for the remaining instructions...",
+                                      pos=(0.0, 0.0),
+                                      color=(1, 1, 1),
+                                      colorSpace='rgb')
+    instruction2_text = visual.TextStim(WIN,
+                                        text = "You will be asked how many times you heard the target tone at the end of each sequence. If you accurately report the number of target tones–or come close to the actual number of target tones–your ‘score’ will increase by 1. To finish the task, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press 'enter' to continue..."
                                         pos=(0.0, 0.0),
-                                        color=(1, 1, 1), 
+                                        color=(1, 1, 1),
+                                        colorSpace='rgb')
+    instruction3_text = visual.TextStim(WIN,
+                                        text = "It is important for you not to move your eyes or blink during each trial. We also ask that you hold the rest of your body as still as possible. To help with this, a fixation cross '+' will be shown while the tones are playing. Keep your gaze on the fixation cross and hold as still as you can while the cross is on the screen. Press 'enter' to continue..."
+                                        pos=(0.0, 0.0),
+                                        color=(1, 1, 1),
+                                        colorSpace='rgb')
+    instruction4_text = visual.TextStim(WIN,
+                                        text = "You will now complete a series of practice trials where you will try to reach a score of 3. Press 'enter' to continue to the first training trials...",
+                                        pos=(0.0, 0.0),
+                                        color=(1, 1, 1),
                                         colorSpace='rgb')
     instruction_text.draw()
     WIN.flip()
-    event.waitKeys(keyList = ['space'])
+    event.waitKeys(keyList = ['return'])
 
     event.clearEvents(eventType = None)
     instruction2_text.draw()
-    WIN.flip()       
-    event.waitKeys(keyList = ['space','enter']) 
-    WIN.flip()      
+    WIN.flip()
+    event.waitKeys(keyList = ['return'])
+    WIN.flip()
+
+    event.clearEvents(eventType = None)
+    instruction3_text.draw()
+    WIN.flip()
+    event.waitKeys(keyList = ['return'])
+    WIN.flip()
+
+    event.clearEvents(eventType = None)
+    instruction4_text.draw()
+    WIN.flip()
+    event.waitKeys(keyList = ['return'])
+    WIN.flip()
 
 def play_target(WIN, TONE_LEN, target):
     t_snd = Sound(target, secs = TONE_LEN)
