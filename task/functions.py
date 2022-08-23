@@ -202,6 +202,8 @@ def get_mark(FREQS, i, target):
     return(mark)
 
 def play_first_tone(MARKER, TONE_LEN, FREQS, target):
+    print('1', end = ', ', flush = True)
+
     drop = FREQS.index(target)
     indexes = [0, 1, 2]
     indexes.pop(drop)

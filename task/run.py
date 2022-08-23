@@ -6,7 +6,7 @@ from functions import *
 FREQS = [130, 200, 280]
 SEQ_LENS = [30, 36, 42]
 TONE_LEN = 0.3
-SCORE_NEEDED = 18
+SCORE_NEEDED = 20
 SUB_NUM = input("Input subject number: ")
 BLOCK_NUM = input("Input block number: ")
 WIN = visual.Window(size = (1920, 1080),
