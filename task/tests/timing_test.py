@@ -3,6 +3,9 @@ from events import EventMarker
 from psychtoolbox import GetSecs, WaitSecs
 from psychopy.sound.backend_ptb import SoundPTB as Sound
 import random
+import os
+
+os.chdir('..')
 
 FREQS = [130, 200, 280]
 TONES = 1000
