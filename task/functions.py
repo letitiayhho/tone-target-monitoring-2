@@ -109,19 +109,15 @@ def ready(WIN):
     WIN.flip()
 
 def play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones):
-    tone_nums = []
-    freqs = []
-    marks = []
-    is_targets = []
     n_targets = 0
     force = False
     one_back = 0
     two_back = 0
 
     # play first tone
-    play_first_tone(MARKER, TONE_LEN, FREQS, target)
+    tone_nums, freqs, marks, is_targets = play_first_tone(MARKER, TONE_LEN, FREQS, target)
     
-    for tone_num in range(1, n_tones):
+    for tone_num in range(2, n_tones + 1):
         print(tone_num, end = ', ', flush = True)
 
         # select tone
@@ -157,13 +153,24 @@ def play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones):
     return(tone_nums, freqs, marks, is_targets, n_targets)
 
 def play_first_tone(MARKER, TONE_LEN, FREQS, target):
-    FREQS.remove(freq)
-    freq = random.choice(FREQS)
+    drop = FREQS.index(target)
+    indexes = [0, 1, 2]
+    indexes.pop(drop)
+    i = random.choice(indexes)
+    freq = FREQS[i]
+
     snd = Sound(freq, secs = TONE_LEN)
     snd.play(when = now + 0.1)
     WaitSecs(0.1)
     MARKER.send(mark)
     WaitSecs(TONE_LEN - 0.2)
+    
+    tone_nums = [1]
+    freqs = [freq]
+    mark = [i + 1]
+    is_targets = [0]
+    
+    return(tone_nums, freqs, marks, is_targets)
 
 def check_target(freq, target, n_targets):
     if freq == target:
