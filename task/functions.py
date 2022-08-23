@@ -87,12 +87,12 @@ def instructions(WIN):
                                       color=(1, 1, 1),
                                       colorSpace='rgb')
     instruction2_text = visual.TextStim(WIN,
-                                        text = "You will be asked how many times you heard the target tone at the end of each sequence. If you accurately report the number of target tones–or come close to the actual number of target tones–your ‘score’ will increase by 1. To finish the task, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press 'enter' to continue..."
+                                        text = "You will be asked how many times you heard the target tone at the end of each sequence. If you accurately report the number of target tones–or come close to the actual number of target tones–your ‘score’ will increase by 1. To finish the task, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press 'enter' to continue...",
                                         pos=(0.0, 0.0),
                                         color=(1, 1, 1),
                                         colorSpace='rgb')
     instruction3_text = visual.TextStim(WIN,
-                                        text = "It is important for you not to move your eyes or blink during each trial. We also ask that you hold the rest of your body as still as possible. To help with this, a fixation cross '+' will be shown while the tones are playing. Keep your gaze on the fixation cross and hold as still as you can while the cross is on the screen. Press 'enter' to continue..."
+                                        text = "It is important for you not to move your eyes or blink during each trial. We also ask that you hold the rest of your body as still as possible. To help with this, a fixation cross '+' will be shown while the tones are playing. Keep your gaze on the fixation cross and hold as still as you can while the cross is on the screen. Press 'enter' to continue...",
                                         pos=(0.0, 0.0),
                                         color=(1, 1, 1),
                                         colorSpace='rgb')
@@ -167,7 +167,7 @@ def play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones):
         if not force:
             i = random.randint(0, len(FREQS)-1)
         freq = FREQS[i]
-        mark = i + 1
+        mark = get_mark(FREQS, i, target)
         snd = Sound(freq, secs = TONE_LEN)
 
         # increment
@@ -195,20 +195,30 @@ def play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones):
     print('')
     return(tone_nums, freqs, marks, is_targets, n_targets)
 
+def get_mark(FREQS, i, target):
+    tone_mark = i + 1
+    target_mark = FREQS.index(target) + 1
+    mark = int(str(target_mark) + str(tone_mark))
+    return(mark)
+
 def play_first_tone(MARKER, TONE_LEN, FREQS, target):
     drop = FREQS.index(target)
     indexes = [0, 1, 2]
     indexes.pop(drop)
     i = random.choice(indexes)
     freq = FREQS[i]
-    mark = i + 1
+    mark = get_mark(FREQS, i, target)
 
+    # schedule sound
     now = GetSecs()
     snd = Sound(freq, secs = TONE_LEN)
     snd.play(when = now + 0.1)
     WaitSecs(0.1)
     MARKER.send(mark)
-    WaitSecs(TONE_LEN - 0.2)
+    WaitSecs(TONE_LEN - 0.15)
+
+    # Add jitter between tones
+    WaitSecs(TONE_LEN + random.uniform(-0.1, 0))
 
     tone_nums = [1]
     freqs = [freq]
