@@ -1,4 +1,5 @@
 from psychopy import visual, core, event
+from psychtoolbox import WaitSecs
 from events import EventMarker
 from functions import *
 
@@ -38,14 +39,14 @@ while score < SCORE_NEEDED:
     # Play target
     play_target(WIN, TONE_LEN, target)
     ready(WIN)
-    core.wait(0.5)
+    WaitSecs(0.5)
 
     # Play tones
     fixation(WIN)
-    core.wait(1)
+    WaitSecs(1)
     tone_nums, freqs, marks, is_targets, n_targets = play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones)
     WIN.flip()
-    core.wait(0.5)
+    WaitSecs(0.5)
 
     # Get response
     response = get_response(WIN)
@@ -58,6 +59,8 @@ while score < SCORE_NEEDED:
     # Write log file
     write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, tone_nums,
               freqs, marks, is_targets, n_targets, response, correct, score)
-    core.wait(1)
+    WaitSecs(1)
+
+print("Block over.")
 
 core.quit()

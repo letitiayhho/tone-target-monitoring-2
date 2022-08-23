@@ -116,7 +116,7 @@ def play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones):
 
     # play first tone
     tone_nums, freqs, marks, is_targets = play_first_tone(MARKER, TONE_LEN, FREQS, target)
-    
+
     for tone_num in range(2, n_tones + 1):
         print(tone_num, end = ', ', flush = True)
 
@@ -145,7 +145,7 @@ def play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones):
         freqs.append(freq)
         marks.append(mark)
         is_targets.append(is_target)
-        
+
         # check for repeats
         force, i, one_back, two_back = check_repeats(FREQS, freq, one_back, two_back)
 
@@ -158,18 +158,20 @@ def play_first_tone(MARKER, TONE_LEN, FREQS, target):
     indexes.pop(drop)
     i = random.choice(indexes)
     freq = FREQS[i]
+    mark = i + 1
 
+    now = GetSecs()
     snd = Sound(freq, secs = TONE_LEN)
     snd.play(when = now + 0.1)
     WaitSecs(0.1)
     MARKER.send(mark)
     WaitSecs(TONE_LEN - 0.2)
-    
+
     tone_nums = [1]
     freqs = [freq]
-    mark = [i + 1]
+    marks = [mark]
     is_targets = [0]
-    
+
     return(tone_nums, freqs, marks, is_targets)
 
 def check_target(freq, target, n_targets):
