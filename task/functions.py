@@ -118,10 +118,13 @@ def play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones):
     one_back = 0
     two_back = 0
 
-    for tone_num in range(1, n_tones + 1):
+    # play first tone
+    play_first_tone(MARKER, TONE_LEN, FREQS, target)
+    
+    for tone_num in range(1, n_tones):
         print(tone_num, end = ', ', flush = True)
 
-        # select next tone
+        # select tone
         if not force:
             i = random.randint(0, len(FREQS)-1)
         freq = FREQS[i]
@@ -152,6 +155,15 @@ def play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones):
 
     print('')
     return(tone_nums, freqs, marks, is_targets, n_targets)
+
+def play_first_tone(MARKER, TONE_LEN, FREQS, target):
+    FREQS.remove(freq)
+    freq = random.choice(FREQS)
+    snd = Sound(freq, secs = TONE_LEN)
+    snd.play(when = now + 0.1)
+    WaitSecs(0.1)
+    MARKER.send(mark)
+    WaitSecs(TONE_LEN - 0.2)
 
 def check_target(freq, target, n_targets):
     if freq == target:
