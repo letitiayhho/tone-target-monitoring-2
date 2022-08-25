@@ -217,7 +217,7 @@ def play_first_tone(MARKER, TONE_LEN, FREQS, target):
     snd.play(when = now + 0.1)
     WaitSecs(0.1)
     MARKER.send(mark)
-    WaitSecs(TONE_LEN - 0.15)
+    WaitSecs(TONE_LEN - 0.1)
 
     # Add jitter between tones
     WaitSecs(TONE_LEN + random.uniform(-0.1, 0))
