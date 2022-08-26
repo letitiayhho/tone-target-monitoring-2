@@ -133,12 +133,13 @@ def play_target(WIN, TONE_LEN, target):
                                   colorSpace='rgb')
     target_text.draw()
     WIN.flip()
-    event.waitKeys(keyList = ['space']) # Make sure target is played at least once
+    target_played = False
     while True:
         keys = event.getKeys(keyList = ['space', 'return'])
         if 'space' in keys:
             t_snd.play()
-        elif 'return' in keys:
+            target_played = True
+        elif 'return' in keys and target_played:
             break
 
 def ready(WIN):
@@ -353,5 +354,6 @@ def update_score(WIN, n_targets, response, score, SCORE_NEEDED):
     WIN.flip()
 
     event.waitKeys(keyList = ['return'])
+    WIN.flip()
 
     return(correct, score)
