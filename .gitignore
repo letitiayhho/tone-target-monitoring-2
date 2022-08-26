@@ -1,3 +1,6 @@
+*.eeg
+*.vhdr
+*.vmrk
 .DS_Store
 *.log
 __pycache__
