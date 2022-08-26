@@ -45,7 +45,8 @@ def play_sequence(FREQS, TONE_LEN, target, n_tones):
     for tone_num in range(1, n_tones + 1):
 
         # select next tone
-        index = random.randint(0, len(FREQS)-1)
+        if not force:
+            index = random.randint(0, len(FREQS)-1)
         freq = FREQS[index]
         mark = index + 1
 
@@ -55,12 +56,21 @@ def play_sequence(FREQS, TONE_LEN, target, n_tones):
             n_targets += 1
         else:
             is_target = 0
+            
+        # prevent the same tone from playing more than 3 consecutive times
+        if freq == one_back == two_back:
+            force = True
+            indexes = [0, 1, 2].pop(LETTERS.index(LET))
+            i = random.choice(indexes)
 
         # save tone info
         tone_nums.append(tone_num)
         freqs.append(freq)
         marks.append(mark)
         is_targets.append(is_target)
+        
+        one_back = freq
+        two_back = one_back
 
     print('')
     return(tone_nums, freqs, marks, is_targets, n_targets)

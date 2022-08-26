@@ -133,6 +133,7 @@ def play_target(WIN, TONE_LEN, target):
                                   colorSpace='rgb')
     target_text.draw()
     WIN.flip()
+    event.waitKeys(keyList = ['space']) # Make sure target is played at least once
     while True:
         keys = event.getKeys(keyList = ['space', 'return'])
         if 'space' in keys:
