@@ -35,7 +35,7 @@ if BLOCK_NUM == "0":
     SCORE_NEEDED = 3
     instructions(WIN)
 else:
-    SCORE_NEEDED = 20
+    SCORE_NEEDED = 18
 
 
 # play sequences until SCORE_NEEDED is reached
