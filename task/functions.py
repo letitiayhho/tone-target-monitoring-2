@@ -147,24 +147,28 @@ def instructions(WIN):
     instruction_text.draw()
     WIN.flip()
     event.waitKeys(keyList = ['return'])
+    print('instruction1')
 
     event.clearEvents(eventType = None)
     instruction2_text.draw()
     WIN.flip()
     event.waitKeys(keyList = ['return'])
     WIN.flip()
+    print('instruction2')
 
     event.clearEvents(eventType = None)
     instruction3_text.draw()
     WIN.flip()
     event.waitKeys(keyList = ['return'])
     WIN.flip()
+    print('instruction3')
 
     event.clearEvents(eventType = None)
     instruction4_text.draw()
     WIN.flip()
     event.waitKeys(keyList = ['return'])
     WIN.flip()
+    print('instruction4')
 
 def play_target(WIN, TONE_LEN, target):
     t_snd = Sound(target, secs = TONE_LEN)
