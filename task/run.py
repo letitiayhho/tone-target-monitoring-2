@@ -59,7 +59,7 @@ while score < SCORE_NEEDED:
     n_tones = get_n_tones(SEQ_LENS)
 
     # Play target
-    play_target(WIN, TONE_LEN, target)
+    n_target_plays = play_target(WIN, TONE_LEN, target)
     ready(WIN)
     WaitSecs(0.5)
 
@@ -80,7 +80,7 @@ while score < SCORE_NEEDED:
     print(f'seq_num: {seq_num}')
 
     # Write log file
-    write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, tone_nums,
+    write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, n_target_plays, tone_nums,
               freqs, marks, is_targets, n_targets, response, correct, score)
     WaitSecs(1)
 
