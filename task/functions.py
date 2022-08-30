@@ -80,19 +80,62 @@ def fixation(WIN):
     WIN.flip()
     return(fixation)
 
+def hear_pitches(WIN, TONE_LEN, FREQS): 
+    p1 = Sound(FREQS[0], secs = TONE_LEN)
+    p2 = Sound(FREQS[1], secs = TONE_LEN)
+    p3 = Sound(FREQS[2], secs = TONE_LEN)
+    
+    p1_txt = visual.TextStim(WIN, 
+                            text = """You will be presented with random sequences of three tones in this task. You will now hear the three tones. Press 'enter' to hear the first tone.""", 
+                            pos=(0.0, 0.0),
+                            color=(1, 1, 1),
+                            colorSpace='rgb')
+    p1_txt.draw()
+    WIN.flip()
+    event.waitKeys(keyList = ['return'])
+    p1.play()
+    core.wait(1)
+    
+    p2_txt = visual.TextStim(WIN, 
+                                text = "Press 'enter' to hear the second tone.", 
+                                pos=(0.0, 0.0),
+                                color=(1, 1, 1),
+                                colorSpace='rgb')
+    
+    event.clearEvents(eventType = None)
+    p2_txt.draw()
+    WIN.flip()
+    event.waitKeys(keyList = ['return'])
+    p2.play()
+    core.wait(1)
+
+    p3_txt = visual.TextStim(WIN,
+                                text = "Press 'enter' to hear the third tone.",
+                                pos=(0.0, 0.0),
+                                color=(1, 1, 1),
+                                colorSpace='rgb')
+
+    event.clearEvents(eventType = None)
+    p3_txt.draw()
+    WIN.flip()
+    event.waitKeys(keyList = ['return'])
+    p3.play()
+    core.wait(1)
+
+
 def instructions(WIN):
     instruction_text = visual.TextStim(WIN,
-                                      text = "In this experiment, you will be presented with a ‘target’ tone, which we will ask you to remember. This target tone will be played amidst a sequence of other tones; your task is to count and remember how many times you hear the target tone in a sequence. Press 'enter' for the remaining instructions...",
+                                      text = "In each trial of this experiment, one of the three tones you just heard will be randomly selected as the ‘target’ tone. You will be allowed to listen to the target tone as many times as you like. This target tone will then be played amidst a sequence of the other two tones. Your task is to count and remember how many times you hear the target tone in the sequence. Press ‘space’ for the remaining instructions…",
                                       pos=(0.0, 0.0),
                                       color=(1, 1, 1),
                                       colorSpace='rgb')
     instruction2_text = visual.TextStim(WIN,
-                                        text = "You will be asked how many times you heard the target tone at the end of each sequence. If you accurately report the number of target tones–or come close to the actual number of target tones–your ‘score’ will increase by 1. To finish the task, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press 'enter' to continue...",
+                                        text = "You will be asked how many times you heard the target tone at the end of a sequence and if you accurately report the number of target tones–or come close to the actual number of target tones–your score will increase by 1. To finish the task, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press ‘space’ to continue…",
                                         pos=(0.0, 0.0),
                                         color=(1, 1, 1),
                                         colorSpace='rgb')
     instruction3_text = visual.TextStim(WIN,
-                                        text = "It is important for you not to move your eyes or blink during each trial. We also ask that you hold the rest of your body as still as possible. To help with this, a fixation cross '+' will be shown while the tones are playing. Keep your gaze on the fixation cross and hold as still as you can while the cross is on the screen. Press 'enter' to continue...",
+                                        text = "It is important for you not to move your eyes or blink while the tones are playing. We also ask that you hold the rest of your body as still as possible. To help with this, a fixation cross '+' will be shown during the tone sequence. Keep your gaze on the fixation cross and hold as still as you can while the cross is on the screen. Press 'enter' to continue...",
                                         pos=(0.0, 0.0),
                                         color=(1, 1, 1),
                                         colorSpace='rgb')
