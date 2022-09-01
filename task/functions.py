@@ -125,12 +125,12 @@ def hear_pitches(WIN, TONE_LEN, FREQS):
 
 def instructions(WIN):
     instruction_text = visual.TextStim(WIN,
-                                      text = "In each trial of this experiment, one of the three tones you just heard will be randomly selected as the ‘target’ tone. You will be allowed to listen to the target tone as many times as you like. This target tone will then be played amidst a sequence of the other two tones. Your task is to count and remember how many times you hear the target tone in the sequence. Press 'space' for the remaining instructions…",
+                                      text = "In each trial of this experiment, one of the three tones you just heard will be randomly selected as the ‘target’ tone. You will be allowed to listen to the target tone as many times as you like. This target tone will then be played amidst a sequence of the other two tones. Your task is to count and remember how many times you hear the target tone in the sequence. Press 'enter' for the remaining instructions…",
                                       pos=(0.0, 0.0),
                                       color=(1, 1, 1),
                                       colorSpace='rgb')
     instruction2_text = visual.TextStim(WIN,
-                                        text = "You will be asked how many times you heard the target tone at the end of a sequence and if you accurately report the number of target tones–or come close to the actual number of target tones–your 'score' will increase by 1. To finish the task, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press 'space' to continue…",
+                                        text = "You will be asked how many times you heard the target tone at the end of a sequence and if you accurately report the number of target tones–or come close to the actual number of target tones–your 'score' will increase by 1. To finish the task, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press 'enter' to continue…",
                                         pos=(0.0, 0.0),
                                         color=(1, 1, 1),
                                         colorSpace='rgb')
