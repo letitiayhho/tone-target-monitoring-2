@@ -147,24 +147,28 @@ def instructions(WIN):
     instruction_text.draw()
     WIN.flip()
     event.waitKeys(keyList = ['return'])
+    print('instruction1')
 
     event.clearEvents(eventType = None)
     instruction2_text.draw()
     WIN.flip()
     event.waitKeys(keyList = ['return'])
     WIN.flip()
+    print('instruction2')
 
     event.clearEvents(eventType = None)
     instruction3_text.draw()
     WIN.flip()
     event.waitKeys(keyList = ['return'])
     WIN.flip()
+    print('instruction3')
 
     event.clearEvents(eventType = None)
     instruction4_text.draw()
     WIN.flip()
     event.waitKeys(keyList = ['return'])
     WIN.flip()
+    print('instruction4')
 
 def play_target(WIN, TONE_LEN, target):
     t_snd = Sound(target, secs = TONE_LEN)
@@ -177,13 +181,18 @@ def play_target(WIN, TONE_LEN, target):
     target_text.draw()
     WIN.flip()
     target_played = False
+    n_target_plays = 0
     while True:
         keys = event.getKeys(keyList = ['space', 'return'])
         if 'space' in keys:
             t_snd.play()
             target_played = True
+            n_target_plays += 1
+            print('Target played')
         elif 'return' in keys and target_played:
             break
+
+    return(n_target_plays)
 
 def ready(WIN):
     block_begin = visual.TextStim(WIN,
@@ -301,7 +310,7 @@ def broadcast(n_tones, var):
         broadcasted_array = [var]*n_tones
     return(broadcasted_array)
 
-def write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, tone_nums,
+def write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, n_target_plays, tone_nums,
               freqs, marks, is_targets, n_targets, response, correct, score):
     print("Writing to log file")
     d = {
@@ -310,6 +319,7 @@ def write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, tone_nums
         'block_num': broadcast(n_tones, BLOCK_NUM),
         'seq_num': broadcast(n_tones, seq_num),
         'target': broadcast(n_tones, target),
+        'n_target_plays': broadcast(n_tones, n_target_plays),
         'tone_num' : tone_nums,
         'freq': freqs,
         'mark': marks,
