@@ -36,20 +36,20 @@ random.seed(SEED)
 #have subj listen to 3 pitches
 #display instructions if training block
 #welcome to block
-if BLOCK_NUM == "0": 
+if BLOCK_NUM == "0":
     SCORE_NEEDED = 3
     hear_pitches(WIN, TONE_LEN, FREQS)
     instructions(WIN)
 else:
     event.clearEvents(eventType = None)
-    blk_welcome = visual.TextStim(WIN, 
-                                  text = f"Welcome to block number {BLOCK_NUM}. Press 'space' to continue.",
+    blk_welcome = visual.TextStim(WIN,
+                                  text = f"Welcome to block number {BLOCK_NUM}. Press 'enter' to continue.",
                                   pos=(0.0, 0.0),
-                                  color=(1, 1, 1), 
+                                  color=(1, 1, 1),
                                   colorSpace='rgb' )
     blk_welcome.draw()
     WIN.flip()
-    event.waitKeys(keyList = ['space'])
+    event.waitKeys(keyList = ['return'])
     SCORE_NEEDED =18
 
 
@@ -61,7 +61,7 @@ while score < SCORE_NEEDED:
     # Play target
     n_target_plays = play_target(WIN, TONE_LEN, target)
     ready(WIN)
-    WaitSecs(0.5)
+    WaitSecs(1)
 
     # Play tones
     fixation(WIN)
