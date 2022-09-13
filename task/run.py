@@ -37,20 +37,12 @@ random.seed(SEED)
 #display instructions if training block
 #welcome to block
 if BLOCK_NUM == "0":
-    SCORE_NEEDED = 3
     hear_pitches(WIN, TONE_LEN, FREQS)
     instructions(WIN)
+    SCORE_NEEDED = 3
 else:
-    event.clearEvents(eventType = None)
-    blk_welcome = visual.TextStim(WIN,
-                                  text = f"Welcome to block number {BLOCK_NUM}. Press 'enter' to continue.",
-                                  pos=(0.0, 0.0),
-                                  color=(1, 1, 1),
-                                  colorSpace='rgb' )
-    blk_welcome.draw()
-    WIN.flip()
-    event.waitKeys(keyList = ['return'])
-    SCORE_NEEDED =18
+    welcome(WIN, BLOCK_NUM)
+    SCORE_NEEDED = 18
 
 
 # play sequences until SCORE_NEEDED is reached
