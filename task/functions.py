@@ -131,7 +131,7 @@ def instructions(WIN):
                                       color=(1, 1, 1),
                                       colorSpace='rgb')
     instruction2_text = visual.TextStim(WIN,
-                                        text = "You will be asked how many times you heard the target tone at the end of a sequence and if you accurately report the number of target tones–or come close to the actual number of target tones–your 'score' will increase by 1. To finish the task, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press 'enter' to continue…",
+                                        text = "You will be asked how many times you heard the target tone at the end of a sequence and if you accurately report the number of target tones–or come close to the actual number of target tones–your 'score' will increase by 1. To finish each block, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press 'enter' to continue…",
                                         pos=(0.0, 0.0),
                                         color=(1, 1, 1),
                                         colorSpace='rgb')
