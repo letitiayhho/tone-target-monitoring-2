@@ -3,14 +3,30 @@
 import argparse
 import subprocess
 from util.io.iter_raw_paths import iter_raw_paths
+from mne_bids import BIDSPath
 
 def main(subs, skips) -> None:
     RAW_DIR = '../data/raw/' # where our data currently lives
-    BAD_SUBS = ['1', '2', '41', '45']
-
+    BIDS_DIR = '../data/bids/' # where we want it to live
+    BAD_SUBS = ['1', '2', '17']
+    
     for (fpath, sub, task, run) in iter_raw_paths(RAW_DIR):
+
+        # skips files that already exist
+        bids_path = BIDSPath(
+            run = run,
+            subject = sub,
+            task = task,
+            datatype = 'eeg',
+            root = BIDS_DIR
+            )
+        if os.path.isfile(bids_path):
+            print(f'File {bids_path} exists, skipping {fpath}')
+            continue
+        
         # skip bad subjects
         if sub in BAD_SUBS:
+            print(f'Bad subject {sub}, skipping')
             continue
 
         # skip if subs were listed and this sub is not included

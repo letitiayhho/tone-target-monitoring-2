@@ -19,23 +19,11 @@ import sys
 import re
 from util.io.get_chan_mapping import get_chan_mapping
 
-def main(fpath, sub, task, run) -> None:
-    print(fpath, sub, task, run)
+def main(fpath, sub, task, run, bids_path) -> None:
+    print(fpath, sub, task, run, bids_path)
 
-    RAW_DIR = '../data/raw/' # where our data currently lives
-    BIDS_DIR = '../data/bids/' # where we want it to live
-    MAPS_DIR = '../data/captrak/' # where the mapping and electrode location files live
-
-    # create output file name
-    bids_path = BIDSPath(
-        run = run,
-        subject = sub,
-        task = task,
-        datatype = 'eeg',
-        root = BIDS_DIR
-    )
-    if os.path.isfile(bids_path):
-        sys.exit(f'File {bids_path} exists, skipping {fname}')
+    RAW_DIR = '../data/raw/' 
+    MAPS_DIR = '../data/captrak/'
 
     # load data with MNE function for your file format
     fpath = os.path.join(RAW_DIR, fpath)
@@ -100,15 +88,16 @@ def main(fpath, sub, task, run) -> None:
         overwrite = True,
     )
 
-__doc__ = "Usage: ./convert-to-bids.py <fpath> <sub> <task> <run>"
+__doc__ = "Usage: ./convert-to-bids.py <fpath> <sub> <task> <run> <bids_path>"
 
 if __name__ == "__main__":
-    if len(sys.argv) != 5:
+    if len(sys.argv) != 6:
         print(__doc__)
         sys.exit(1)
     fpath = sys.argv[1]
     sub = sys.argv[2]
     task = sys.argv[3]
     run = sys.argv[4]
-    main(fpath, sub, task, run)
+    bids_path = sys.argv[5]
+    main(fpath, sub, task, run, bids_path)
 
