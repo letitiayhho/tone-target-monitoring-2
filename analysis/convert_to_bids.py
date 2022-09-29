@@ -53,7 +53,7 @@ def main(fpath, sub, task, run) -> None:
     raw.add_reference_channels(ref_channels = ['Cz'])
 
     # checks
-    if n_chans != 65:
+    if len(raw.ch_names) != 65:
         sys.exit(f"Incorrect number of channels, there should be 65 (stim incl) channels, instead there are {n_chans} channels")
 
     # map channels to their coordinates
