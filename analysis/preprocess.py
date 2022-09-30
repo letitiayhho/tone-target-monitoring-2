@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=02:00:00
+#SBATCH --time=04:00:00
 #SBATCH --partition=bigmem2
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=128G
+#SBATCH --mem-per-cpu=256G
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
 #SBATCH --output=logs/preprocess_%j.log
 
 import sys
 import gc
-from util.io.preprocessing import *
+from util.io.preprocess import *
 
 def main(sub, task, run) -> None:
     # Constants
@@ -29,20 +29,14 @@ def main(sub, task, run) -> None:
     raw.load_data()
     raw = create_eogs(raw)
 
-    if sub == '4':
-        raw = raw.drop_channels(['Ch64']) # drop channel with no coordinates for sub 4
-
     # Resampling and PREP
     print("---------- Resampling and PREP ----------")
-    #raw, events = resample(raw, FS, events)
-    # if sub == '2':
-        # raw = resample(FS)
     raw, bads = run_PREP(raw, sub, run, LOWPASS)
 
     # Run ICA on one copy of the data
     print("---------- Run ICA on one copy of the data ----------")
     raw_for_ica = bandpass(raw, None, 1)
-    raw = bandpass(raw, 270, 30)
+    raw = bandpass(raw, 300, 30)
 
     epochs_for_ica = epoch(raw_for_ica, events, event_ids)
     epochs = epoch(raw, events, event_ids)

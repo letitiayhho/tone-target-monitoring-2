@@ -93,7 +93,7 @@ def epoch(raw, events, event_ids):
         raw,
         events,
         tmin = -0.2,
-        tmax = 0.250,
+        tmax = 0.350,
         baseline = None, # do NOT baseline correct the trials yet; we do that after ICA
         event_id = event_ids, # remember which epochs are associated with which condition
         preload = True # keep data in memory
@@ -133,9 +133,6 @@ def get_save_path(deriv_root, sub, task, run):
                     suffix = 'epo', # this suffix is following MNE, not BIDS, naming conventions
                     extension = 'fif.gz',
                     )
-    fpath_split = fpath.split('_')
-    fpath_split.insert(3, 'res-hi')
-    fpath = '_'.join(fpath_split)
     return fpath, sink
 
 def save_and_generate_report(fpath, epochs, sink, sub, task, run, ica, bads, thres):
@@ -147,10 +144,10 @@ def save_and_generate_report(fpath, epochs, sink, sub, task, run, ica, bads, thr
     report.parse_folder(op.dirname(fpath), pattern = '*run-%s*epo.fif.gz'%run, render_bem = False)
 
     # Plot the ERP
-    fig_erp = epochs['50'].average().plot(spatial_colors = True)
+    fig_erp = epochs['22'].average().plot(spatial_colors = True)
     report.add_figure(
         fig_erp,
-        caption = 'Average Evoked Response',
+        caption = 'Average Evoked Response for 1 condition',
         title = 'evoked'
     )
 
@@ -172,4 +169,4 @@ def save_and_generate_report(fpath, epochs, sink, sub, task, run, ica, bads, thr
     report.add_html('<br/>threshold: {:0.2f} microvolts</br>'.format(thres['eeg'] * 1e6),
                                 title = 'Trial Rejection Criteria')
     report.add_html(epochs.info._repr_html_(), title = 'Info')
-    report.save(op.join(sink.deriv_root, 'sub-%s_task-%s_run-%s_res-hi.html'%(sub, task, run)), open_browser = False, overwrite = True)
+    report.save(op.join(sink.deriv_root, 'sub-%s_task-%s_run-%s.html'%(sub, task, run)), open_browser = False, overwrite = True)

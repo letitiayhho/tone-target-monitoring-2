@@ -4,7 +4,7 @@ import os
 import sys
 import subprocess
 import argparse
-from util.io.preprocessing import get_save_path
+from util.io.preprocess import get_save_path
 from util.io.iter_BIDSPaths import *
 
 def main(subs, skips) -> None:

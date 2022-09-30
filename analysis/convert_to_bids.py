@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=00:02:00
+#SBATCH --time=00:05:00
 #SBATCH --partition=broadwl
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=64G
+#SBATCH --mem-per-cpu=96G
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
 #SBATCH --output=logs/convert-to-bids_%j.log
@@ -17,13 +17,13 @@ import mne
 import os
 import sys
 import re
-from util.io.get_chan_mapping import get_chan_mapping
 
-def main(fpath, sub, task, run, bids_path) -> None:
-    print(fpath, sub, task, run, bids_path)
+def main(fpath, sub, task, run) -> None:
+    print(fpath, sub, task, run)
 
     RAW_DIR = '../data/raw/' 
     MAPS_DIR = '../data/captrak/'
+    BIDS_DIR = '../data/bids/'
 
     # load data with MNE function for your file format
     fpath = os.path.join(RAW_DIR, fpath)
@@ -38,7 +38,9 @@ def main(fpath, sub, task, run, bids_path) -> None:
 
     # map channel numbers to channel names
     print("Map channel numbers to channel names")
-    mapping = get_chan_mapping(MAPS_DIR, sub)
+    map_fp = '../data/captrak/pitch_tracking_64_at_FCZ.csv'
+    mapping_table = pd.read_csv(map_fp)
+    mapping = {mapping_table.number[i]: mapping_table.name[i] for i in range(len(mapping_table))}
     raw.rename_channels(mapping)
     raw.add_reference_channels(ref_channels = ['Cz'])
 
@@ -56,7 +58,7 @@ def main(fpath, sub, task, run, bids_path) -> None:
         print(captrak_path)
         if os.path.isfile(captrak_path):
             print(f"Using captrak file from {captrak_sub}")
-            dig = mne. channels.read_dig_captrak(captrak_path)
+            dig = mne.channels.read_dig_captrak(captrak_path)
             raw.set_montage(dig, on_missing = 'warn')
             captrak_found = True
         else:
@@ -79,6 +81,14 @@ def main(fpath, sub, task, run, bids_path) -> None:
 
     # write data into BIDS directory, while anonymizing
     print("Write data into BIDS directory")
+    bids_path = BIDSPath(
+            run = run,
+            subject = sub,
+            task = task,
+            datatype = 'eeg',
+            root = BIDS_DIR
+    )
+
     write_raw_bids(
         raw,
         bids_path = bids_path,
@@ -88,16 +98,15 @@ def main(fpath, sub, task, run, bids_path) -> None:
         overwrite = True,
     )
 
-__doc__ = "Usage: ./convert-to-bids.py <fpath> <sub> <task> <run> <bids_path>"
+__doc__ = "Usage: ./convert-to-bids.py <fpath> <sub> <task> <run>"
 
 if __name__ == "__main__":
-    if len(sys.argv) != 6:
+    if len(sys.argv) != 5:
         print(__doc__)
         sys.exit(1)
     fpath = sys.argv[1]
     sub = sys.argv[2]
     task = sys.argv[3]
     run = sys.argv[4]
-    bids_path = sys.argv[5]
-    main(fpath, sub, task, run, bids_path)
+    main(fpath, sub, task, run)
 
