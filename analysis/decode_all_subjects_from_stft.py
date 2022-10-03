@@ -30,7 +30,6 @@ def main(subs, skips):
     BIDS_ROOT = '../data/bids'
     layout = BIDSLayout(BIDS_ROOT, derivatives = True)
     fpaths = layout.get(scope = 'preprocessing',
-                    res = 'hi',
                     suffix='epo',
                     extension = 'fif.gz',
                     return_type = 'filename')
@@ -51,35 +50,8 @@ def main(subs, skips):
             print(f"Subject {sub} run {run} already decoded.")
             continue
         
-        # Load stft and events
-        #DERIV_ROOT = '../data/bids/derivatives'
-        #sink = DataSink(DERIV_ROOT, 'decoding')
-        #stft_fpath = sink.get_path(
-        #    subject = sub,
-        #    task = task,
-        #    run = run,
-        #    desc = 'stft',
-        #    suffix = 'power',
-        #    extension = 'npy',
-        #)
-        #print(f'Loading stft from {stft_fpath}')
-        #Zxxs = np.load(stft_fpath)
-        #print(type(Zxxs))
-        #print(np.shape(Zxxs))
-        #events_fpath = f'../data/bids/derivatives/preprocessing/sub-{sub}/sub-{sub}_run-{run}_events.npy'
-        #print(f'Loading stft from {events_fpath}')
-        #events = np.load(events_fpath)
-        #print(type(events))
-        #Zxxs = compute_stft.main(fpath, sub, task, run, stft_fpath)
-        #print(type(Zxxs))
-        #print(np.shape(Zxxs))
-        #print(type(events))
-        
         # Decode
         print('subprocess.check_call("sbatch ./decode_from_stft.py %s %s %s" % (sub, task, run), shell=True)')
-
-        #subprocess.check_call("sbatch ./decode_from_stft.py %s %s %s %s" % (sub, task, run, Zxxs), shell=True)
-
         subprocess.check_call("sbatch ./decode_from_stft.py %s %s %s" % (sub, task, run), shell=True)
 
 if __name__ == "__main__":

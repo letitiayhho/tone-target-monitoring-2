@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=04:00:00
+#SBATCH --time=04:00:00 # 3 hours enough for most subs, 3.5 to be safe
 #SBATCH --partition=bigmem2
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=256G
+#SBATCH --mem-per-cpu=300G # 256 enough for most subs, 300 to be safe
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
 #SBATCH --output=logs/preprocess_%j.log

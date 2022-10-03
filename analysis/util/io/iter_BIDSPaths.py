@@ -8,16 +8,6 @@ from bids import BIDSLayout
 KeyType = Tuple[str, str, str, str]
 
 def iter_BIDSPaths(fpaths) -> Iterator[KeyType]:
-#     # Get filepaths
-#     if derivatives:
-#         layout = BIDSLayout(bids_root, derivatives = derivatives)
-#         fpaths = layout.get(scope = 'preprocessing',
-#                             extension = 'fif.gz',
-#                             return_type = 'filename')
-#     else:
-#         layout = BIDSLayout(bids_root)
-#         fpaths = layout.get(extension = 'eeg',
-#                             return_type = 'filename')
 
     # Get corresponding subject number
     filter_subs = re.compile('sub-(\d{1,2})_')

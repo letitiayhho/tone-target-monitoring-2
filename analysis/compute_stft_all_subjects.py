@@ -11,7 +11,6 @@ def main(subs, skips) -> None:
     BIDS_ROOT = '../data/bids'
     layout = BIDSLayout(BIDS_ROOT, derivatives = True)
     fpaths = layout.get(scope = 'preprocessing',
-                    res = 'hi',
                     suffix='epo',
                     extension = 'fif.gz',
                     return_type = 'filename')
@@ -28,9 +27,9 @@ def main(subs, skips) -> None:
             suffix = 'power',
             extension = 'npy',
         )
-#         if os.path.isfile(save_fpath):
-#             print(f"Stft already computed for {sub} run {run}")
-#             continue
+        if os.path.isfile(save_fpath):
+            print(f"Stft already computed for {sub} run {run}")
+            continue
         
         # if subs were given but sub is not in subs, don't preprocess
         if bool(subs) and sub not in subs:

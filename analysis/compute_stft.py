@@ -18,7 +18,7 @@ from util.io.stft import *
 
 def main(fpath, sub, task, run, save_fpath):
     FS = 5000
-    CONDITION_FREQS = [50, 100, 150, 200, 250]
+    CONDITION_FREQS = [130, 200, 280]
     
     # Read data
     epochs = mne.read_epochs(fpath)

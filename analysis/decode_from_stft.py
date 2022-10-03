@@ -28,8 +28,7 @@ def main(sub, task, run):
     FIGS_ROOT = '../figs'
 
     # Load events
-    #events_fpath = f'../data/bids/derivatives/preprocessing/sub-{sub}/sub-{sub}_run-{run}_events.npy'
-    epochs_fpath = f'/project2/hcn1/pitch_tracking/scripts/../data/bids/derivatives/preprocessing/sub-{sub}/sub-{sub}_task-pitch_run-{run}_res-hi_desc-clean_epo.fif.gz'
+    epochs_fpath = f'/project2/hcn1/pitch_tracking_attention/scripts/../data/bids/derivatives/preprocessing/sub-{sub}/sub-{sub}_task-pitch_run-{run}_desc-clean_epo.fif.gz'
     print(f'Loading events from {epochs_fpath}')
     epochs = mne.read_epochs(epochs_fpath)
     events = epochs.events
@@ -52,22 +51,19 @@ def main(sub, task, run):
     n_epochs = np.shape(Zxxs)[0]
     if n_epochs != np.shape(events)[0]:
         sys.exit('Incorrect number of epochs')
-    n_freqs = 5
+    n_freqs = 3
     n_chans = 62
-    n_windows = 19
+    n_windows = 19 ## CHANGE THIS
     Zxxs = Zxxs.reshape((n_epochs, n_freqs*n_chans, n_windows)) # n_epochs, n_freqs*n_chans, n_windows
 
     # Create target array
     labels = pd.Series(events[:, 2])
-    y = labels.replace({10001 : 0, 10002 : 1, 10003 : 2, 10004 : 3, 10005 : 4})
+    y = labels.replace({10001 : 0, 10002 : 1, 10003 : 2, 10004 : 3, 10005 : 4}) # CHANGE THIS
     le = preprocessing.LabelEncoder()
     y = le.fit_transform(y)
 
     # Decode
     print("---------- Decode ----------")
-    n_stimuli = 5
-    metric = 'accuracy'
-
     clf = make_pipeline(
         StandardScaler(),
         LogisticRegression(solver = 'liblinear')
@@ -106,12 +102,12 @@ def main(sub, task, run):
     ax.plot(range(len(scores)), scores, label = 'score')
     ax.axhline(1/n_stimuli, color = 'k', linestyle = '--', label = 'chance')
     ax.set_xlabel('Times')
-    ax.set_ylabel(metric)  # Area Under the Curve
+    ax.set_ylabel('Accuracy')  # Area Under the Curve
     ax.legend()
     ax.set_title('Sensor space decoding')
 
     # Save plot
-    fig_fpath = FIGS_ROOT + '/subj-' + sub + '_' + 'task-pitch_' + 'run-' + run + '_stft' + '.png'
+    fig_fpath = FIGS_ROOT + '/sub-' + sub + '_run-' + run + '_stft' + '.png'
     print('Saving figure to: ' + fig_fpath)
     plt.savefig(fig_fpath)
 

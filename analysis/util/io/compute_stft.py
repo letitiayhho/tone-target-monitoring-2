@@ -38,7 +38,7 @@ def get_stft_for_one_channel(x, fs, n_epochs, condition_freqs): # where x is n_e
 def compute_stft(fpath, sub, task, run):
     DERIV_ROOT = '../data/bids/derivatives'
     FS = 5000
-    CONDITION_FREQS = [50, 100, 150, 200, 250]
+    CONDITION_FREQS = [130, 200, 280]
     
     # Read data
     epochs = mne.read_epochs(fpath)

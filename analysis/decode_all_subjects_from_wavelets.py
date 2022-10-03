@@ -11,13 +11,14 @@ from util.io.bids import DataSink
 def main(subs, skips) -> None:
     BIDS_ROOT = '../data/bids'
     DERIV_ROOT = '../data/bids/derivatives'
+    CONDS = ['11', '12', '13', '21', '22', '23', '31', '32', '33']
 
     layout = BIDSLayout(BIDS_ROOT, derivatives = True)
     fpaths = layout.get(scope = 'preprocessing',
-                    res = 'hi',
                     suffix='epo',
                     extension = 'fif.gz',
                     return_type = 'filename')
+    
     
     for (fpath, sub, task, run) in iter_BIDSPaths(fpaths):
         
@@ -28,22 +29,25 @@ def main(subs, skips) -> None:
         # if sub in skips, don't preprocess
         if sub in skips:
             continue
+           
+        for cond in CONDS:
 
-        # skip if subject is already decoded
-        sink = DataSink(DERIV_ROOT, 'decoding')
-        scores_fpath = sink.get_path(
-            subject = sub,
-            task = task,
-            run = run,
-            desc = 'log_reg_no_crop',
-            suffix = 'scores',
-            extension = 'npy',
-        )
-        if os.path.isfile(scores_fpath) and sub not in subs:
-            print(f"Subject {sub} run {run} is already preprocessed")
-            continue
-
-        subprocess.check_call("sbatch ./decode_from_wavelets.py %s %s %s %s %s" % (fpath, sub, task, run, scores_fpath), shell=True)
+            # skip if subject is already decoded
+            sink = DataSink(DERIV_ROOT, 'decoding')
+            scores_fpath = sink.get_path(
+                subject = sub,
+                task = task,
+                run = run,
+                desc = 'wavelet_' + cond,
+                suffix = 'scores',
+                extension = 'npy',
+            )
+            if os.path.isfile(scores_fpath) and sub not in subs:
+                print(f"Subject {sub} run {run} is already preprocessed")
+                continue
+             
+            print(f"subprocess.check_call('sbatch ./decode_from_wavelets.py %s %s %s %s %s %s' % ({fpath}, {sub}, {task}, {run}, {cond}, {scores_fpath}), shell=True)")
+            subprocess.check_call("sbatch ./decode_from_wavelets.py %s %s %s %s %s %s" % (fpath, sub, task, run, cond, scores_fpath), shell=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run decode_from_wavelets.py over given subjects')
