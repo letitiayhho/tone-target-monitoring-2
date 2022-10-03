@@ -3,7 +3,7 @@
 #SBATCH --time=00:02:00
 #SBATCH --partition=broadwl
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=48G
+#SBATCH --mem-per-cpu=64G
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
 #SBATCH --output=logs/convert-to-bids_%j.log
@@ -33,22 +33,27 @@ def main(fpath, sub, task, run, bids_path) -> None:
     raw.set_channel_types({'Aux1': 'stim'})
 
     # add some info BIDS will want
+    print("Add line_freq to raw.info")
     raw.info['line_freq'] = 60 # the power line frequency in the building we collected in
 
     # map channel numbers to channel names
+    print("Map channel numbers to channel names")
     mapping = get_chan_mapping(MAPS_DIR, sub)
     raw.rename_channels(mapping)
     raw.add_reference_channels(ref_channels = ['Cz'])
 
     # checks
-    if n_chans != 65:
+    if len(raw.ch_names) != 65:
         sys.exit(f"Incorrect number of channels, there should be 65 (stim incl) channels, instead there are {n_chans} channels")
 
     # map channels to their coordinates
+    print("Map channels to their captrak coordinates")
     captrak_found = False
     captrak_sub = sub
     while not captrak_found:
-        captrak_path = MAPS_DIR + 'sub-' + captrak_sub + '.bvct'
+        print("Looking for captrak file")
+        captrak_path = MAPS_DIR + 'sub-' + str(captrak_sub) + '.bvct'
+        print(captrak_path)
         if os.path.isfile(captrak_path):
             print(f"Using captrak file from {captrak_sub}")
             dig = mne. channels.read_dig_captrak(captrak_path)
@@ -58,6 +63,7 @@ def main(fpath, sub, task, run, bids_path) -> None:
             captrak_sub = random.randint(3, 30)
 
     # drop meaningless event name
+    print("Set annotations")
     events, event_ids = mne.events_from_annotations(raw)
     events = events[events[:,2] != event_ids['New Segment/'], :]
 
@@ -72,6 +78,7 @@ def main(fpath, sub, task, run, bids_path) -> None:
     daysback_min, daysback_max = get_anonymization_daysback(raw)
 
     # write data into BIDS directory, while anonymizing
+    print("Write data into BIDS directory")
     write_raw_bids(
         raw,
         bids_path = bids_path,

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import argparse
 import subprocess
 from util.io.iter_raw_paths import iter_raw_paths
@@ -12,18 +13,6 @@ def main(subs, skips) -> None:
     
     for (fpath, sub, task, run) in iter_raw_paths(RAW_DIR):
 
-        # skips files that already exist
-        bids_path = BIDSPath(
-            run = run,
-            subject = sub,
-            task = task,
-            datatype = 'eeg',
-            root = BIDS_DIR
-            )
-        if os.path.isfile(bids_path):
-            print(f'File {bids_path} exists, skipping {fpath}')
-            continue
-        
         # skip bad subjects
         if sub in BAD_SUBS:
             print(f'Bad subject {sub}, skipping')
@@ -37,11 +26,23 @@ def main(subs, skips) -> None:
         if sub in skips:
             continue
 
-        print("subprocess.check_call(\"sbatch ./convert-to-bids.py %s %s %s %s\" % (fpath, sub, task, run, bids_path), shell=True)")
-        subprocess.check_call("sbatch ./convert-to-bids.py %s %s %s %s" % (fpath, sub, task, run, bids_path), shell=True)
+        # skips files that already exist
+        bids_path = BIDSPath(
+            run = run,
+            subject = sub,
+            task = task,
+            datatype = 'eeg',
+            root = BIDS_DIR
+            )
+        if os.path.isfile(bids_path):
+            print(f'File {bids_path} exists, skipping {fpath}')
+            continue
+        
+        #print("subprocess.check_call(\"sbatch ./convert_to_bids.py %s %s %s %s\" % (fpath, sub, task, run), shell=True)")
+        subprocess.check_call("sbatch ./convert_to_bids.py %s %s %s %s" % (fpath, sub, task, run), shell=True)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Run convert-to-bids.py over given subjects')
+    parser = argparse.ArgumentParser(description='Run convert_to_bids.py over given subjects')
     parser.add_argument('--subs',
                         type = str,
                         nargs = '*',
