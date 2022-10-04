@@ -11,7 +11,8 @@ from util.io.bids import DataSink
 def main(subs, skips) -> None:
     BIDS_ROOT = '../data/bids'
     DERIV_ROOT = '../data/bids/derivatives'
-    CONDS = ['11', '12', '13', '21', '22', '23', '31', '32', '33']
+    CONDS = ['target']
+#     CONDS = ['11', '12', '13', '21', '22', '23', '31', '32', '33']
 
     layout = BIDSLayout(BIDS_ROOT, derivatives = True)
     fpaths = layout.get(scope = 'preprocessing',

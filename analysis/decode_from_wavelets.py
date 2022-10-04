@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-#SBATCH --time=00:5:00 # only need 15 minutes for regular logreg? need like 4 hrs for logregcv, 30 min for logreg no crop
+#SBATCH --time=00:08:00 # only need 15 minutes for regular logreg? need like 4 hrs for logregcv, 30 min for logreg no crop
 #SBATCH --partition=broadwl
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=4
-#SBATCH --mem-per-cpu=8G # this doesn't seem to influence run time much
+#SBATCH --mem-per-cpu=32G # this doesn't seem to influence run time much
 #SBATCH --mail-type=all
 #SBATCH --mail-user=letitiayhho@uchicago.edu
 #SBATCH --output=logs/decode_from_wavelets_%j.log
@@ -40,10 +40,13 @@ def main(fpath, sub, task, run, cond, scores_fpath):
     events = epochs.events
     
     print("---------- Subset epochs ----------")
-    CONDS = {'1': ['11', '12', '13'], # subset the trials belonging to the given condition
-             '2': ['21', '22', '23'],
-             '3': ['31', '32', '33']}
-    condition_epochs = epochs[CONDS[cond[0]]]
+    if cond == 'target':
+        condition_epochs = epochs
+    else:
+        CONDS = {'1': ['11', '12', '13'], # subset the trials belonging to each target tone
+                 '2': ['21', '22', '23'],
+                 '3': ['31', '32', '33'],}
+        condition_epochs = epochs[CONDS[cond[0]]]
     events = condition_epochs.events
     print(condition_epochs.event_id)
     print(condition_epochs)
@@ -88,7 +91,10 @@ def main(fpath, sub, task, run, cond, scores_fpath):
                    '23': {10001 : 0, 10002 : 0, 10003 : 0, 10004: 0, 10005: 0, 10006: 1, 10007: 0, 10008: 0, 10009: 0},
                    '31': {10001 : 0, 10002 : 0, 10003 : 0, 10004: 0, 10005: 0, 10006: 0, 10007: 1, 10008: 0, 10009: 0},
                    '32': {10001 : 0, 10002 : 0, 10003 : 0, 10004: 0, 10005: 0, 10006: 0, 10007: 0, 10008: 1, 10009: 0},
-                   '33': {10001 : 0, 10002 : 0, 10003 : 0, 10004: 0, 10005: 0, 10006: 0, 10007: 0, 10008: 0, 10009: 1},}
+                   '33': {10001 : 0, 10002 : 0, 10003 : 0, 10004: 0, 10005: 0, 10006: 0, 10007: 0, 10008: 0, 10009: 1},
+                   'target': {10001 : 1, 10002 : 0, 10003 : 0, 10004: 0, 10005: 1, 10006: 0, 10007: 0, 10008: 0, 10009: 1}}
+                    # FOR REFERENCE {'11': 10001, '12': 10002, '13': 10003, '21': 10004, 
+                    #'22': 10005, '23': 10006, '31': 10007, '32': 10008, '33': 10009}
     y = labels.replace(EVENT_DICTS[cond])
     le = preprocessing.LabelEncoder()
     y = le.fit_transform(y)
@@ -100,7 +106,8 @@ def main(fpath, sub, task, run, cond, scores_fpath):
     )
 
     print("Creating sliding estimators")
-    time_decod = SlidingEstimator(clf)
+    time_decod = SlidingEstimator(clf,
+                                 scoring = 'roc_auc')
 
     print("Fit estimators")
     scores = cross_val_multiscore(
@@ -120,7 +127,7 @@ def main(fpath, sub, task, run, cond, scores_fpath):
     n_stimuli = 3 
     fig, ax = plt.subplots()
     ax.plot(range(len(scores)), scores, label = 'score')
-    ax.axhline(1/n_stimuli, color = 'k', linestyle = '--', label = 'chance')
+    ax.axhline(1/2, color = 'k', linestyle = '--', label = 'chance')
     ax.set_xlabel('Times')
     ax.set_ylabel('Accuracy')
     ax.legend()
