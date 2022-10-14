@@ -8,11 +8,15 @@ from bids import BIDSLayout
 from util.io.iter_BIDSPaths import *
 from util.io.bids import DataSink
 
-def main(subs, skips) -> None:
+def main(cond, subs, skips) -> None:
     BIDS_ROOT = '../data/bids'
     DERIV_ROOT = '../data/bids/derivatives'
-    CONDS = ['target']
-#     CONDS = ['11', '12', '13', '21', '22', '23', '31', '32', '33']
+    if cond == 'target':  
+        CONDS = ['target']
+    elif cond == 'tone':
+        CONDS = ['tone_target', 'tone_nontarget']
+    elif cond == 'binary':
+        CONDS = ['11', '12', '13', '21', '22', '23', '31', '32', '33']
 
     layout = BIDSLayout(BIDS_ROOT, derivatives = True)
     fpaths = layout.get(scope = 'preprocessing',
@@ -52,6 +56,11 @@ def main(subs, skips) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run decode_from_wavelets.py over given subjects')
+    parser.add_argument('cond', 
+                        type = str, 
+                        nargs = 1, 
+                        help = 'condition, either <target> (decode if sound is a target) <binary> (for each condition decode if the tone is a target or distractor) or <tone> (for targets vs distractors, decode the identity of the tone', 
+                        default = [])
     parser.add_argument('--subs', 
                         type = str, 
                         nargs = '*', 
@@ -63,9 +72,13 @@ if __name__ == "__main__":
                         help = 'subjects NOT to stft for (e.g. 1 9)', 
                         default = [])
     args = parser.parse_args()
+    cond = args.cond[0]
     subs = args.subs
     skips = args.skips
-    print(f"subs: {subs}, skips : {skips}")
+    print(f"cond : '{cond}', subs: {subs}, skips : {skips}")
     if bool(subs) & bool(skips):
         raise ValueError('Cannot specify both subs and skips')
-    main(subs, skips)
+    if cond not in ['target', 'binary', 'tone']:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
+    main(cond, subs, skips)
