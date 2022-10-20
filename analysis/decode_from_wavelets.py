@@ -115,7 +115,7 @@ def main(fpath, sub, task, run, cond, scores_fpath):
 
     print("Creating sliding estimators")
     time_decod = SlidingEstimator(clf,
-                                 scoring = 'roc_auc')
+                                 scoring = 'balanced_accuracy')
 
     print("Fit estimators")
     scores = cross_val_multiscore(
@@ -135,7 +135,7 @@ def main(fpath, sub, task, run, cond, scores_fpath):
     n_stimuli = 3 
     fig, ax = plt.subplots()
     ax.plot(range(len(scores)), scores, label = 'score')
-    ax.axhline(1/2, color = 'k', linestyle = '--', label = 'chance')
+    ax.axhline(1/n_stimuli, color = 'k', linestyle = '--', label = 'chance')
     ax.set_xlabel('Times')
     ax.set_ylabel('Accuracy')
     ax.legend()

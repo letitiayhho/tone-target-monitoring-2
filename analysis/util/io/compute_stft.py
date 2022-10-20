@@ -6,7 +6,8 @@ from scipy import signal
 from util.io.bids import DataSink
 
 def summarize_stft(f, Zxx, n_epochs, condition_freqs): # approximate power at the condition freqs
-    Zxx_condensed = np.empty([n_epochs, len(condition_freqs), 19])
+    n_windows = np.shape(Zxx)[2]
+    Zxx_condensed = np.empty([n_epochs, len(condition_freqs), n_windows])
     
     for i in range(len(condition_freqs)):
         
@@ -16,6 +17,7 @@ def summarize_stft(f, Zxx, n_epochs, condition_freqs): # approximate power at th
         b = a+1
         
         # subset power for the condition freq
+        print(np.shape(Zxx))
         condition_Zxx = Zxx[:,a:b+1, :]
         
         # take average to get approximate for power at condition freq
@@ -35,43 +37,43 @@ def get_stft_for_one_channel(x, fs, n_epochs, condition_freqs): # where x is n_e
     
     return (f, t, Zxx)
 
-def compute_stft(fpath, sub, task, run):
-    DERIV_ROOT = '../data/bids/derivatives'
-    FS = 5000
-    CONDITION_FREQS = [130, 200, 280]
+# def compute_stft(fpath, sub, task, run):
+#     DERIV_ROOT = '../data/bids/derivatives'
+#     FS = 5000
+#     CONDITION_FREQS = [130, 200, 280]
     
-    # Read data
-    epochs = mne.read_epochs(fpath)
-    print("events read")
-    events = epochs.events
-    epochs = epochs.get_data()
+#     # Read data
+#     epochs = mne.read_epochs(fpath)
+#     print("events read")
+#     events = epochs.events
+#     epochs = epochs.get_data()
     
-    # Get metadata
-    n_freqs = len(CONDITION_FREQS)
-    n_epochs = np.shape(epochs)[0]
-    n_chans = np.shape(epochs)[1]
+#     # Get metadata
+#     n_freqs = len(CONDITION_FREQS)
+#     n_epochs = np.shape(epochs)[0]
+#     n_chans = np.shape(epochs)[1]
     
-    # Compute stft across all channels
-    Zxxs = np.empty([n_epochs, n_chans, n_freqs, 19]) # n_epochs, n_chans, n_freqs, n_windows
-    for chan in range(n_chans):
-        x = pd.DataFrame(epochs[:, chan, :])
-        f, t, Zxx = get_stft_for_one_channel(x, FS, n_epochs, CONDITION_FREQS)
-        Zxxs[:, chan, :, :] = Zxx
+#     # Compute stft across all channels
+#     Zxxs = np.empty([n_epochs, n_chans, n_freqs, 19]) # n_epochs, n_chans, n_freqs, n_windows
+#     for chan in range(n_chans):
+#         x = pd.DataFrame(epochs[:, chan, :])
+#         f, t, Zxx = get_stft_for_one_channel(x, FS, n_epochs, CONDITION_FREQS)
+#         Zxxs[:, chan, :, :] = Zxx
         
-    # Reshape for decoder
-    Zxxs = Zxxs.reshape((n_epochs, n_freqs*n_chans, 19)) # n_epochs, n_freqs*n_chans, n_windows
+#     # Reshape for decoder
+#     Zxxs = Zxxs.reshape((n_epochs, n_freqs*n_chans, 19)) # n_epochs, n_freqs*n_chans, n_windows
 
-    # Save powers and events
-    sink = DataSink(DERIV_ROOT, 'decoding')
-    stft_fpath = sink.get_path(
-        subject = sub,
-        task = task,
-        run = run,
-        desc = 'stft',
-        suffix = 'power',
-        extension = 'npy',
-    )
-    print('Saving scores to: ' + stft_fpath)
-    np.save(stft_fpath, Zxxs)
+#     # Save powers and events
+#     sink = DataSink(DERIV_ROOT, 'decoding')
+#     stft_fpath = sink.get_path(
+#         subject = sub,
+#         task = task,
+#         run = run,
+#         desc = 'stft',
+#         suffix = 'power',
+#         extension = 'npy',
+#     )
+#     print('Saving scores to: ' + stft_fpath)
+#     np.save(stft_fpath, Zxxs)
         
     return (Zxxs, events)
