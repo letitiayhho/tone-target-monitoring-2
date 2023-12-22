@@ -51,12 +51,33 @@ freqs = FREQS[condition]
 target = TARGETS[condition]
 
 # have subj listen the tones and display instructions if training block
+welcome(WIN, BLOCK_NUM) 
 if BLOCK_NUM == "1":
-    welcome(WIN, BLOCK_NUM) 
+    
 hear_pitches(WIN, TONE_LEN, FREQS)
 instructions(WIN)
 
-# play sequences until SCORE_NEEDED is reached
+# practice trial
+while score < 1:
+
+    # Play target
+    n_target_plays = play_target(WIN, TONE_LEN, target)
+    ready(WIN)
+    WaitSecs(1)
+
+    # Play tones
+    fixation(WIN)
+    WaitSecs(1)
+    tone_nums, freqs, marks, is_targets, n_targets = play_sequence(MARKER, FREQS, TONE_LEN, target, 40)
+    WIN.flip()
+    WaitSecs(0.5)
+
+    # Get response
+    response = get_response(WIN)
+    correct, score = update_score(WIN, n_targets, response, score, SCORE_NEEDED)
+
+# experiment block
+# play sequences until SCORE_NEEDED is reached or seq_num >= 25
 while score < SCORE_NEEDED:
     n_tones = get_n_tones(SEQ_LENS)
 
@@ -85,6 +106,12 @@ while score < SCORE_NEEDED:
     write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, n_target_plays, tone_nums,
               freqs, marks, is_targets, n_targets, response, correct, score)
     WaitSecs(1)
+    
+    # Break if more than 25 sequences have been played
+    if seq_num >= 25:
+        break
+        
+block_end()
 
 print("Block over.")
 

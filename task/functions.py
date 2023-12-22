@@ -88,7 +88,7 @@ def hear_pitches(WIN, TONE_LEN, FREQS):
     p3 = Sound(FREQS[2], secs = TONE_LEN)
 
     p1_txt = visual.TextStim(WIN,
-                            text = "You will be presented with random sequences consisting of three different tones. Your job will be to count how many times you hear the target tone. You will now hear the target tone and the two distractor tones. Press 'enter' to hear the target tone, you will get a chance to play the target tone at the beginning of each trial.",
+                            text = "You will be presented with random sequences consisting of three different tones. Your job will be to count how many times you hear the target tone. You will now hear the target tone and the two distractor tones. Press 'enter' to hear the target tone now. You will also get a chance to play the target tone at the beginning of each trial.",
                             pos=(0.0, 0.0),
                             color=(1, 1, 1),
                             colorSpace='rgb')
@@ -125,30 +125,28 @@ def hear_pitches(WIN, TONE_LEN, FREQS):
     core.wait(1)
 
 def instructions(WIN):
-    instruction_text = visual.TextStim(WIN,
-                                      text = "In each trial of this experiment, one of the three tones you just heard will be randomly selected as the ‘target’ tone. You will be allowed to listen to the target tone as many times as you like. This target tone will then be played amidst a sequence of the other two tones. Your task is to count and remember how many times you hear the target tone in the sequence. Press 'enter' for the remaining instructions…",
+    instruction1_text = visual.TextStim(WIN,
+                                      text = "In each trial you will be asked to count the number of times you hear the target tone. At the beginning of each trial you will get the chance to listen to the target tone as many times as you like. Pay close attention as the target tone will change every block. You will be asked how many times you heard the target tone at the end of each sequence. If you accurately report the number of target tones–or come close to the actual number of target tones–your 'score' will increase by 1. To finish each block, you will have to reach a score of 20. Please ask your experimenter any questions you may have about the task. Press 'enter' to continue...",
                                       pos=(0.0, 0.0),
                                       color=(1, 1, 1),
                                       colorSpace='rgb')
     instruction2_text = visual.TextStim(WIN,
-                                        text = "You will be asked how many times you heard the target tone at the end of a sequence and if you accurately report the number of target tones–or come close to the actual number of target tones–your 'score' will increase by 1. To finish each block, you will have to reach a score of 18. Please ask your experimenter any questions you may have about the task. Press 'enter' to continue…",
-                                        pos=(0.0, 0.0),
-                                        color=(1, 1, 1),
-                                        colorSpace='rgb')
-    instruction3_text = visual.TextStim(WIN,
                                         text = "It is important for you not to move your eyes or blink while the tones are playing. We also ask that you hold the rest of your body as still as possible. To help with this, a fixation cross '+' will be shown during the tone sequence. Keep your gaze on the fixation cross and hold as still as you can while the cross is on the screen. Press 'enter' to continue...",
                                         pos=(0.0, 0.0),
                                         color=(1, 1, 1),
                                         colorSpace='rgb')
-    instruction4_text = visual.TextStim(WIN,
-                                        text = "You will now complete a series of practice trials where you will try to reach a score of 3. Press 'enter' to continue to the first training trials...",
+    
+    instruction3_text = visual.TextStim(WIN,
+                                        text = "You will now complete one practice trial before the block begins. Press 'enter' to begin the practice trial...",
                                         pos=(0.0, 0.0),
                                         color=(1, 1, 1),
                                         colorSpace='rgb')
-    instruction_text.draw()
+    event.clearEvents(eventType = None)
+    instruction1_text.draw()
     WIN.flip()
     event.waitKeys(keyList = ['return'])
-    print('instruction1')
+    WIN.flip()
+    print('instruction2')
 
     event.clearEvents(eventType = None)
     instruction2_text.draw()
@@ -156,27 +154,27 @@ def instructions(WIN):
     event.waitKeys(keyList = ['return'])
     WIN.flip()
     print('instruction2')
-
+    
     event.clearEvents(eventType = None)
-    instruction3_text.draw()
+    instruction2_text.draw()
     WIN.flip()
     event.waitKeys(keyList = ['return'])
     WIN.flip()
-    print('instruction3')
-
-    event.clearEvents(eventType = None)
-    instruction4_text.draw()
-    WIN.flip()
-    event.waitKeys(keyList = ['return'])
-    WIN.flip()
-    print('instruction4')
+    print('instruction2')
 
 def welcome(WIN, BLOCK_NUM):
-    blk_welcome = visual.TextStim(WIN,
-                                  text = f"Welcome to block number {BLOCK_NUM}. Press 'enter' to continue.",
-                                  pos=(0.0, 0.0),
-                                  color=(1, 1, 1),
-                                  colorSpace='rgb' )
+    if BLOCK_NUM == '1':
+        blk_welcome = visual.TextStim(WIN,
+                                      text = f"Welcome to the study. Press 'enter' to continue.",
+                                      pos=(0.0, 0.0),
+                                      color=(1, 1, 1),
+                                      colorSpace='rgb' )
+    else:
+        blk_welcome = visual.TextStim(WIN,
+                                      text = f"Welcome to block number {BLOCK_NUM}/6. Press 'enter' to continue.",
+                                      pos=(0.0, 0.0),
+                                      color=(1, 1, 1),
+                                      colorSpace='rgb' )
     blk_welcome.draw()
     WIN.flip()
     event.waitKeys(keyList = ['return'])
