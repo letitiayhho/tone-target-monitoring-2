@@ -284,13 +284,14 @@ def broadcast(n_tones, var):
         broadcasted_array = [var]*n_tones
     return(broadcasted_array)
 
-def write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, n_target_plays, tone_nums,
+def write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, condition, seq_num, target, n_target_plays, tone_nums,
               freqs, marks, is_targets, n_targets, response, correct, score):
     print("Writing to log file")
     d = {
         'seed': broadcast(n_tones, SEED),
         'sub_num': broadcast(n_tones, SUB_NUM),
         'block_num': broadcast(n_tones, BLOCK_NUM),
+        'condition': broadcast(n_tones, condition),
         'seq_num': broadcast(n_tones, seq_num),
         'target': broadcast(n_tones, target),
         'n_target_plays': broadcast(n_tones, n_target_plays),

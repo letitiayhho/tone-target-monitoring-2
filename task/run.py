@@ -103,7 +103,7 @@ while score < SCORE_NEEDED:
     print(f'seq_num: {seq_num}')
 
     # Write log file
-    write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, seq_num, target, n_target_plays, tone_nums,
+    write_log(LOG, n_tones, SEED, SUB_NUM, BLOCK_NUM, condition, seq_num, target, n_target_plays, tone_nums,
               freqs, marks, is_targets, n_targets, response, correct, score)
     WaitSecs(1)
     
