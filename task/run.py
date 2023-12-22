@@ -4,7 +4,7 @@ from events import EventMarker
 from functions import *
 
 # constants
-FREQS = {1: [128, 200, 280], 
+COND_FREQS = {1: [128, 200, 280], 
          2: [128, 90, 200],
          3: [200, 280, 350]}
     # Tags should be AB,
@@ -47,14 +47,12 @@ print(f"seq_num: {seq_num}")
 # randomly select condition
 conditions = get_condition_order()
 condition = conditions[int(BLOCK_NUM) - 1]
-freqs = FREQS[condition]
+FREQS = COND_FREQS[condition]
 target = TARGETS[condition]
 
-# have subj listen the tones and display instructions if training block
+# listen to all three tones and display instructions
 welcome(WIN, BLOCK_NUM) 
-if BLOCK_NUM == "1":
-    
-hear_pitches(WIN, TONE_LEN, FREQS)
+hear_tones(WIN, TONE_LEN, FREQS)
 instructions(WIN)
 
 # practice trial
@@ -68,7 +66,7 @@ while score < 1:
     # Play tones
     fixation(WIN)
     WaitSecs(1)
-    tone_nums, freqs, marks, is_targets, n_targets = play_sequence(MARKER, FREQS, TONE_LEN, target, 40)
+    tone_nums, freqs, marks, is_targets, n_targets = play_sequence(MARKER, FREQS, TONE_LEN, ISI, condition, target, 40)
     WIN.flip()
     WaitSecs(0.5)
 
@@ -76,6 +74,8 @@ while score < 1:
     response = get_response(WIN)
     correct, score = update_score(WIN, n_targets, response, score, SCORE_NEEDED)
 
+end_practice(WIN)
+    
 # experiment block
 # play sequences until SCORE_NEEDED is reached or seq_num >= 25
 while score < SCORE_NEEDED:
@@ -89,7 +89,7 @@ while score < SCORE_NEEDED:
     # Play tones
     fixation(WIN)
     WaitSecs(1)
-    tone_nums, freqs, marks, is_targets, n_targets = play_sequence(MARKER, FREQS, TONE_LEN, target, n_tones)
+    tone_nums, freqs, marks, is_targets, n_targets = play_sequence(MARKER, FREQS, TONE_LEN, ISI, condition, target, n_tones)
     WIN.flip()
     WaitSecs(0.5)
 
