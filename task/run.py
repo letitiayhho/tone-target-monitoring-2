@@ -4,13 +4,23 @@ from events import EventMarker
 from functions import *
 
 # constants
-FREQS = [130, 200, 280]
-SEQ_LENS = [30, 36, 42]
+FREQS = {1: [128, 200, 280], 
+         2: [128, 90, 200],
+         3: [200, 280, 350]}
+    # Tags should be AB,
+    # where A is condition number, 
+    # where B is tone number where 90 = 1, 128 = 2, 200 = 3, 280 = 4, 350 = 5
+TARGETS = {1: 128,
+           2: 128,
+           3: 200}
+SEQ_LENS = [36, 40, 44]
 TONE_LEN = 0.3
+ISI = 0.3
+SCORE_NEEDED = 20
 
 # ask for subject and block number
 SUB_NUM = input("Input subject number: ")
-BLOCK_NUM = input("Input block number: ")
+BLOCK_NUM = input("Input block number (1-6): ")
 
 # set subject number, block and seq_num as seed
 SEED = int(SUB_NUM + "0" + BLOCK_NUM + str(seq_num))
@@ -34,18 +44,20 @@ print(f"score: {score}")
 seq_num = get_seq_num(LOG)
 print(f"seq_num: {seq_num}")
 
+# randomly select condition
+conditions = get_condition_order()
+condition = conditions[int(BLOCK_NUM) - 1]
+freqs = FREQS[condition]
+target = TARGETS[condition]
+
 # have subj listen the tones and display instructions if training block
-if BLOCK_NUM == "0":
-    hear_pitches(WIN, TONE_LEN, FREQS)
-    instructions(WIN)
-    SCORE_NEEDED = 3
-else:
-    welcome(WIN, BLOCK_NUM)
-    SCORE_NEEDED = 18
+if BLOCK_NUM == "1":
+    welcome(WIN, BLOCK_NUM) 
+hear_pitches(WIN, TONE_LEN, FREQS)
+instructions(WIN)
 
 # play sequences until SCORE_NEEDED is reached
 while score < SCORE_NEEDED:
-    target = get_target(FREQS)
     n_tones = get_n_tones(SEQ_LENS)
 
     # Play target

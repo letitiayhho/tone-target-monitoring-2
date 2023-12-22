@@ -67,9 +67,10 @@ def get_seq_num(LOG):
     seq_num = int(seq_num)
     return(seq_num)
 
-def get_target(FREQS):
-    target = random.choice(FREQS)
-    return(target)
+def get_condition_order():
+    conditions = [(2, 1, 2, 3, 1, 3), (2, 3, 1, 3, 1, 2), (1, 3, 1, 2, 3, 2), (3, 2, 1, 3, 2, 1), (1, 2, 3, 1, 2, 3), (2, 1, 3, 1, 3, 2), (3, 2, 1, 3, 1, 2), (2, 3, 2, 1, 3, 1), (3, 1, 3, 2, 1, 2), (1, 2, 3, 1, 3, 2), (2, 3, 1, 2, 3, 1), (2, 3, 1, 2, 1, 3), (2, 1, 3, 2, 3, 1), (2, 1, 3, 2, 1, 3), (2, 3, 1, 3, 2, 1), (3, 1, 2, 1, 2, 3), (3, 2, 1, 2, 3, 1), (3, 2, 1, 2, 1, 3), (2, 1, 3, 1, 2, 3), (3, 1, 2, 3, 2, 1), (3, 1, 2, 1, 3, 2), (1, 2, 3, 2, 1, 3), (1, 2, 3, 2, 3, 1), (3, 1, 2, 3, 1, 2), (1, 3, 2, 1, 2, 3), (1, 3, 2, 3, 2, 1), (1, 3, 2, 1, 3, 2), (3, 2, 3, 1, 2, 1), (1, 3, 2, 3, 1, 2), (1, 2, 1, 3, 2, 3)]
+    i = random.randint(0, len(conditions)-1)
+    return conditions[i]
 
 def get_n_tones(SEQ_LENS):
     n_tones = random.choice(SEQ_LENS)
@@ -87,7 +88,7 @@ def hear_pitches(WIN, TONE_LEN, FREQS):
     p3 = Sound(FREQS[2], secs = TONE_LEN)
 
     p1_txt = visual.TextStim(WIN,
-                            text = "You will be presented with random sequences of three tones in this task. You will now hear the three tones. Press 'enter' to hear the first tone.",
+                            text = "You will be presented with random sequences consisting of three different tones. Your job will be to count how many times you hear the target tone. You will now hear the target tone and the two distractor tones. Press 'enter' to hear the target tone, you will get a chance to play the target tone at the beginning of each trial.",
                             pos=(0.0, 0.0),
                             color=(1, 1, 1),
                             colorSpace='rgb')
@@ -98,7 +99,7 @@ def hear_pitches(WIN, TONE_LEN, FREQS):
     core.wait(1)
 
     p2_txt = visual.TextStim(WIN,
-                                text = "Press 'enter' to hear the second tone.",
+                                text = "Press 'enter' to hear first distractor tone.",
                                 pos=(0.0, 0.0),
                                 color=(1, 1, 1),
                                 colorSpace='rgb')
@@ -111,7 +112,7 @@ def hear_pitches(WIN, TONE_LEN, FREQS):
     core.wait(1)
 
     p3_txt = visual.TextStim(WIN,
-                                text = "Press 'enter' to hear the third tone.",
+                                text = "Press 'enter' to hear second distractor tone.",
                                 pos=(0.0, 0.0),
                                 color=(1, 1, 1),
                                 colorSpace='rgb')
