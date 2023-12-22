@@ -8,8 +8,8 @@ COND_FREQS = {1: [128, 200, 280],
          2: [128, 90, 200],
          3: [200, 280, 350]}
     # Tags should be AB,
-    # where A is condition number, 
-    # where B is tone number where 90 = 1, 128 = 2, 200 = 3, 280 = 4, 350 = 5
+    # where A is condition number 1, 2, or 3, 
+    # where B is tone number where 90 Hz = 1, 128 = 2, 200 = 3, 280 = 4, 350 = 5
 TARGETS = {1: 128,
            2: 128,
            3: 200}

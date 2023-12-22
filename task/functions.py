@@ -210,7 +210,7 @@ def play_sequence(MARKER, FREQS, TONE_LEN, ISI, target, n_tones):
         MARKER.send(mark)
         WaitSecs(TONE_LEN)
 
-        # add jitter between tones
+        # Add ISI - buffer + jitter
         WaitSecs(ISI - 0.1 + random.uniform(0, 0.5))
 
         # save tone info
@@ -242,12 +242,12 @@ def play_first_tone(MARKER, TONE_LEN, ISI, FREQS):
     # schedule sound
     now = GetSecs()
     snd = Sound(freq, secs = TONE_LEN)
-    snd.play(when = now + 0.1)
+    snd.play(when = now + 0.1) # 0.1 msec buffer
     WaitSecs(0.1)
     MARKER.send(mark)
     WaitSecs(TONE_LEN)
 
-    # Add ISI + jitter between tones
+    # Add ISI - buffer + jitter
     WaitSecs(ISI - 0.1 + random.uniform(0, 0.5))
 
     tone_nums = [1]
